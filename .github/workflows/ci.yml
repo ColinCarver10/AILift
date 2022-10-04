@@ -1,0 +1,29 @@
+name: ci
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+env:
+    CI_XCODE: '/Applications/Xcode_14.0.app/Contents/Developer'
+
+jobs:
+  test:
+    runs-on: macos-12
+    strategy:
+      matrix:
+        destination: ['-destination platform\=iOS\ Simulator,name\=iPhone\ 13\ Pro\ Max test', 'CODE_SIGNING_ALLOWED="NO"']
+        scheme: ['OCKSample', 'OCKWatchSample']
+        exclude:
+        - destination: '-destination platform\=iOS\ Simulator,name\=iPhone\ 13\ Pro\ Max test'
+          scheme: 'OCKWatchSample'
+        - destination: 'CODE_SIGNING_ALLOWED="NO"'
+          scheme: 'OCKSample'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build-Test
+      run: set -o pipefail && env NSUnbufferedIO=YES xcodebuild -project OCKSample.xcodeproj -scheme ${{ matrix.scheme }} ${{ matrix.destination }} | xcpretty
+      env:
+          DEVELOPER_DIR: ${{ env.CI_XCODE }}
+    - name: Send codecov
+      run: bash <(curl https://codecov.io/bash)
