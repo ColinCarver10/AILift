@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ApplicationID</key>
+	<string>7a3e64cd3cf79a69852a506fd2c407b3f97ffa7239308a9446d41df919af10bb</string>
+	<key>Server</key>
+	<string>https://jalentest1.herokuapp.com/parse</string>
+	<key>LiveQueryServer</key>
+	<string></string>
+	<key>UseTransactions</key>
+	<false/>
+	<key>DeleteKeychainIfNeeded</key>
+	<true/>
+</dict>
+</plist>
