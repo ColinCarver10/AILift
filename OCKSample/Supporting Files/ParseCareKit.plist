@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>ApplicationID</key>
-	<string>E036A0C5-6829-4B40-9B3B-3E05F6DF32B2</string>
+	<string>a29c5545e27ecca60bdc6012165de011355c2925adc0b33e3c5ce92538b678e9</string>
 	<key>Server</key>
-	<string>http://localhost:1337/parse</string>
+	<string>https://jcca274-health-app.herokuapp.com/parse</string>
 	<key>LiveQueryServer</key>
 	<string></string>
 	<key>UseTransactions</key>
