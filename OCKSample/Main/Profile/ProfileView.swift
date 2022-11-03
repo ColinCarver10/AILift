@@ -18,73 +18,94 @@ struct ProfileView: View {
     @State var firstName = ""
     @State var lastName = ""
     @State var birthday = Date()
+    @State var showAddTaskView = false
+    @State var showDeleteTaskView = false
 
     var body: some View {
-        VStack {
-            VStack(alignment: .leading) {
-                TextField("First Name", text: $firstName)
-                    .padding()
-                    .cornerRadius(20.0)
-                    .shadow(radius: 10.0, x: 20, y: 10)
-
-                TextField("Last Name", text: $lastName)
-                    .padding()
-                    .cornerRadius(20.0)
-                    .shadow(radius: 10.0, x: 20, y: 10)
-
-                DatePicker("Birthday", selection: $birthday, displayedComponents: [DatePickerComponents.date])
-                    .padding()
-                    .cornerRadius(20.0)
-                    .shadow(radius: 10.0, x: 20, y: 10)
-            }
-
-            Button(action: {
-                Task {
-                    do {
-                        try await viewModel.saveProfile(firstName,
-                                                        last: lastName,
-                                                        birth: birthday)
-                    } catch {
-                        Logger.profile.error("Error saving profile: \(error.localizedDescription)")
+        NavigationView {
+            VStack {
+                Text("")
+                    .toolbar {
+                        ToolbarItemGroup {
+                            Button {
+                                self.showAddTaskView = true
+                            } label: {
+                                Image(systemName: "plus")
+                            }
+                            Button {
+                                self.showDeleteTaskView = true
+                            } label: {
+                                Image(systemName: "trash.fill")
+                            }
+                        }
                     }
-                }
-            }, label: {
-                Text("Save Profile")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(width: 300, height: 50)
-            })
-            .background(Color(.green))
-            .cornerRadius(15)
+                VStack(alignment: .leading) {
+                    TextField("First Name", text: $firstName)
+                        .padding()
+                        .cornerRadius(20.0)
+                        .shadow(radius: 10.0, x: 20, y: 10)
 
-            // Notice that "action" is a closure (which is essentially
-            // a function as argument like we discussed in class)
-            Button(action: {
-                Task {
-                    await loginViewModel.logout()
+                    TextField("Last Name", text: $lastName)
+                        .padding()
+                        .cornerRadius(20.0)
+                        .shadow(radius: 10.0, x: 20, y: 10)
+
+                    DatePicker("Birthday", selection: $birthday, displayedComponents: [DatePickerComponents.date])
+                        .padding()
+                        .cornerRadius(20.0)
+                        .shadow(radius: 10.0, x: 20, y: 10)
                 }
-            }, label: {
-                Text("Log Out")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(width: 300, height: 50)
+
+                Button(action: {
+                    Task {
+                        do {
+                            try await viewModel.saveProfile(firstName,
+                                                            last: lastName,
+                                                            birth: birthday)
+                        } catch {
+                            Logger.profile.error("Error saving profile: \(error.localizedDescription)")
+                        }
+                    }
+                }, label: {
+                    Text("Save Profile")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(width: 300, height: 50)
+                })
+                .background(Color(.green))
+                .cornerRadius(15)
+
+                // Notice that "action" is a closure (which is essentially
+                // a function as argument like we discussed in class)
+                Button(action: {
+                    Task {
+                        await loginViewModel.logout()
+                    }
+                }, label: {
+                    Text("Log Out")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(width: 300, height: 50)
+                })
+                .background(Color(.red))
+                .cornerRadius(15)
+            }.onReceive(viewModel.$patient, perform: { patient in
+                if let currentFirstName = patient?.name.givenName {
+                    firstName = currentFirstName
+                }
+                if let currentLastName = patient?.name.familyName {
+                    lastName = currentLastName
+                }
+                if let currentBirthday = patient?.birthday {
+                    birthday = currentBirthday
+                }
             })
-            .background(Color(.red))
-            .cornerRadius(15)
-        }.onReceive(viewModel.$patient, perform: { patient in
-            if let currentFirstName = patient?.name.givenName {
-                firstName = currentFirstName
-            }
-            if let currentLastName = patient?.name.familyName {
-                lastName = currentLastName
-            }
-            if let currentBirthday = patient?.birthday {
-                birthday = currentBirthday
-            }
-        })
+        } .overlay(DeleteTaskView(showDeleteTaskView: self.$showDeleteTaskView))
+            .overlay(AddTaskView(showAddTaskView: self.$showAddTaskView))
     }
+
 }
 
 struct ProfileView_Previews: PreviewProvider {

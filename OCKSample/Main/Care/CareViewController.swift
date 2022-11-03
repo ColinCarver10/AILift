@@ -255,7 +255,18 @@ class CareViewController: OCKDailyPageViewController {
             return cards
 
         default:
-            return nil
+            if task is OCKHealthKitTask {
+                let view = OCKInstructionsTaskViewController(task: task,
+                                                             eventQuery: .init(for: date),
+                                                             storeManager: self.storeManager)
+                return [view]
+
+            } else { // is OCKTask
+                let grid = OCKGridTaskViewController(task: task,
+                                                     eventQuery: .init(for: date),
+                                                     storeManager: self.storeManager)
+                return [grid]
+            }
         }
     }
 
@@ -264,9 +275,10 @@ class CareViewController: OCKDailyPageViewController {
         query.excludesTasksWithNoEvents = true
         do {
             let tasks = try await storeManager.store.fetchAnyTasks(query: query)
-            let orderedTasks = TaskID.ordered.compactMap { orderedTaskID in
-                tasks.first(where: { $0.id == orderedTaskID }) }
-            return orderedTasks
+            // let orderedTasks = TaskID.ordered.compactMap { orderedTaskID in
+                // tasks.first(where: { $0.id == orderedTaskID }) }
+            // return orderedTasks
+            return tasks
         } catch {
             Logger.feed.error("\(error.localizedDescription, privacy: .public)")
             return []
