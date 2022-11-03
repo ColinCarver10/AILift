@@ -12,6 +12,10 @@
 		6606B5D528F60D7100916A73 /* Styler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9169381A271B64E100A634ED /* Styler.swift */; };
 		6606B5D628F60D7300916A73 /* Styler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9169381A271B64E100A634ED /* Styler.swift */; };
 		6606B5D728F60D8900916A73 /* AppearanceStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6606B5D328F60AC800916A73 /* AppearanceStyle.swift */; };
+		66966DCA2913272800A4608F /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DC92913272800A4608F /* AddTaskView.swift */; };
+		66966DCC2913273A00A4608F /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCB2913273900A4608F /* AddTaskViewModel.swift */; };
+		66966DCE2913279D00A4608F /* DeleteTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCD2913279D00A4608F /* DeleteTaskView.swift */; };
+		66966DD0291327A900A4608F /* DeleteTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCF291327A900A4608F /* DeleteTaskViewModel.swift */; };
 		6696D75F28FDFD9F00C7E7A4 /* AnimationStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696D75E28FDFD9F00C7E7A4 /* AnimationStyle.swift */; };
 		6696D76328FDFDF700C7E7A4 /* DimensionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696D76228FDFDF700C7E7A4 /* DimensionStyle.swift */; };
 		6696D76428FDFDF700C7E7A4 /* DimensionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696D76228FDFDF700C7E7A4 /* DimensionStyle.swift */; };
@@ -162,6 +166,10 @@
 		5173CB8B23C3A846007655A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		51F6343923D2877B00FE576E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		6606B5D328F60AC800916A73 /* AppearanceStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceStyle.swift; sourceTree = "<group>"; };
+		66966DC92913272800A4608F /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
+		66966DCB2913273900A4608F /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
+		66966DCD2913279D00A4608F /* DeleteTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTaskView.swift; sourceTree = "<group>"; };
+		66966DCF291327A900A4608F /* DeleteTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTaskViewModel.swift; sourceTree = "<group>"; };
 		6696D75E28FDFD9F00C7E7A4 /* AnimationStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationStyle.swift; sourceTree = "<group>"; };
 		6696D76228FDFDF700C7E7A4 /* DimensionStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimensionStyle.swift; sourceTree = "<group>"; };
 		6696D76628FE33F400C7E7A4 /* ColorPalette */ = {isa = PBXFileReference; lastKnownFileType = text; path = ColorPalette; sourceTree = "<group>"; };
@@ -338,6 +346,10 @@
 			children = (
 				7036E4C8256E1A6F006E9A3C /* ProfileView.swift */,
 				7036E516256F2413006E9A3C /* ProfileViewModel.swift */,
+				66966DC92913272800A4608F /* AddTaskView.swift */,
+				66966DCB2913273900A4608F /* AddTaskViewModel.swift */,
+				66966DCD2913279D00A4608F /* DeleteTaskView.swift */,
+				66966DCF291327A900A4608F /* DeleteTaskViewModel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -789,7 +801,9 @@
 				70F03AA127860AB700E5AFB4 /* OCKOutcome.swift in Sources */,
 				7036E4CE256E9A0C006E9A3C /* ContactView.swift in Sources */,
 				70F03A972786098F00E5AFB4 /* OCKStore.swift in Sources */,
+				66966DCE2913279D00A4608F /* DeleteTaskView.swift in Sources */,
 				70DFD80B2567074500B9DB12 /* LoginView.swift in Sources */,
+				66966DCA2913272800A4608F /* AddTaskView.swift in Sources */,
 				70F03AA827860E7700E5AFB4 /* FontColorKey.swift in Sources */,
 				70F921A827CA9A3A00368CEC /* CustomStylerKey.swift in Sources */,
 				70221F3428D8ABBE00971195 /* AppDelegate+UIApplicationDelegate.swift in Sources */,
@@ -806,6 +820,7 @@
 				70F0EFE828C2EC050005B5A2 /* OCKSampleApp.swift in Sources */,
 				918FDEB7271B41FF0045A0EF /* Logger.swift in Sources */,
 				70F03A9F27860A8800E5AFB4 /* OCKOutcomeValue+Identifiable.swift in Sources */,
+				66966DCC2913273A00A4608F /* AddTaskViewModel.swift in Sources */,
 				70221F2A28D7BE0600971195 /* AppDelegate+ParseRemoteDelegate.swift in Sources */,
 				7036E4D3256EBE35006E9A3C /* MainView.swift in Sources */,
 				918FDEC5271B4EA70045A0EF /* StoreManagerKey.swift in Sources */,
@@ -818,6 +833,7 @@
 				70F03A9927860A0800E5AFB4 /* OCKSynchronizedStoreManager+Publishers.swift in Sources */,
 				7036E4C9256E1A6F006E9A3C /* ProfileView.swift in Sources */,
 				7083A856279CA40A00B3832E /* PCKUtility.swift in Sources */,
+				66966DD0291327A900A4608F /* DeleteTaskViewModel.swift in Sources */,
 				70F921AE27CABE7700368CEC /* RemoteSessionDelegate.swift in Sources */,
 				70F03A952786093B00E5AFB4 /* OCKHealthKitPassthroughStore.swift in Sources */,
 				7036E4BF256DA089006E9A3C /* LoginViewModel.swift in Sources */,
