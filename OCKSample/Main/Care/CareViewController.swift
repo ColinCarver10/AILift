@@ -256,10 +256,10 @@ class CareViewController: OCKDailyPageViewController {
 
         default:
             if task is OCKHealthKitTask {
-                let view = OCKInstructionsTaskViewController(task: task,
-                                                             eventQuery: .init(for: date),
-                                                             storeManager: self.storeManager)
-                return [view]
+                let grid = OCKGridTaskViewController(task: task,
+                                                     eventQuery: .init(for: date),
+                                                     storeManager: self.storeManager)
+                return [grid]
 
             } else { // is OCKTask
                 let grid = OCKGridTaskViewController(task: task,

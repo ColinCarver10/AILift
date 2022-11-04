@@ -99,6 +99,10 @@ class AddTaskViewModel: ObservableObject {
 
         do {
             try await appDelegate.healthKitStore?.addTasksIfNotPresent([healthKitTask])
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.requestSync)))
+                Utility.requestHealthKitPermissions()
+            }
         } catch {
             // swiftlint:disable:next line_length superfluous_disable_command
             self.error = AppError.errorString("Couldn't add task: \(error.localizedDescription)")
