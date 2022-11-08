@@ -12,6 +12,8 @@
 		6606B5D528F60D7100916A73 /* Styler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9169381A271B64E100A634ED /* Styler.swift */; };
 		6606B5D628F60D7300916A73 /* Styler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9169381A271B64E100A634ED /* Styler.swift */; };
 		6606B5D728F60D8900916A73 /* AppearanceStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6606B5D328F60AC800916A73 /* AppearanceStyle.swift */; };
+		6626BC99291AA3B4000ECFE1 /* CustomContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6626BC98291AA3B4000ECFE1 /* CustomContactViewController.swift */; };
+		6626BC9B291AA486000ECFE1 /* ContactViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6626BC9A291AA486000ECFE1 /* ContactViewModel.swift */; };
 		66966DCA2913272800A4608F /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DC92913272800A4608F /* AddTaskView.swift */; };
 		66966DCC2913273A00A4608F /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCB2913273900A4608F /* AddTaskViewModel.swift */; };
 		66966DCE2913279D00A4608F /* DeleteTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCD2913279D00A4608F /* DeleteTaskView.swift */; };
@@ -166,6 +168,8 @@
 		5173CB8B23C3A846007655A0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		51F6343923D2877B00FE576E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		6606B5D328F60AC800916A73 /* AppearanceStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceStyle.swift; sourceTree = "<group>"; };
+		6626BC98291AA3B4000ECFE1 /* CustomContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomContactViewController.swift; sourceTree = "<group>"; };
+		6626BC9A291AA486000ECFE1 /* ContactViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewModel.swift; sourceTree = "<group>"; };
 		66966DC92913272800A4608F /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 		66966DCB2913273900A4608F /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
 		66966DCD2913279D00A4608F /* DeleteTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTaskView.swift; sourceTree = "<group>"; };
@@ -358,6 +362,8 @@
 			isa = PBXGroup;
 			children = (
 				7036E4CD256E9A0C006E9A3C /* ContactView.swift */,
+				6626BC98291AA3B4000ECFE1 /* CustomContactViewController.swift */,
+				6626BC9A291AA486000ECFE1 /* ContactViewModel.swift */,
 			);
 			path = Contact;
 			sourceTree = "<group>";
@@ -798,6 +804,7 @@
 				70F0EFEA28C2EE6C0005B5A2 /* AppDelegateKey.swift in Sources */,
 				7036E64025717F85006E9A3C /* Constants.swift in Sources */,
 				918FDEBC271B4E4A0045A0EF /* Calendar+Dates.swift in Sources */,
+				6626BC9B291AA486000ECFE1 /* ContactViewModel.swift in Sources */,
 				70F03AA127860AB700E5AFB4 /* OCKOutcome.swift in Sources */,
 				7036E4CE256E9A0C006E9A3C /* ContactView.swift in Sources */,
 				70F03A972786098F00E5AFB4 /* OCKStore.swift in Sources */,
@@ -811,6 +818,7 @@
 				E72B2C0A226939E3009A9438 /* AppDelegate.swift in Sources */,
 				7036E4C4256E0A48006E9A3C /* CareView.swift in Sources */,
 				70F921B027CABED600368CEC /* LocalSyncSessionDelegate.swift in Sources */,
+				6626BC99291AA3B4000ECFE1 /* CustomContactViewController.swift in Sources */,
 				70F03A932786087800E5AFB4 /* OCKAnyEvent+CustomStringConvertable.swift in Sources */,
 				70221F2828D7809800971195 /* MainTabView.swift in Sources */,
 				918FDEC3271B4E950045A0EF /* TintColorKey.swift in Sources */,
