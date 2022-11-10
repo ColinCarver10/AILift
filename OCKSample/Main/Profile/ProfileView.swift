@@ -13,60 +13,69 @@ import CareKit
 import os.log
 
 struct ProfileView: View {
-    @Environment(\.tintColor) private var tintColor
     @StateObject var viewModel = ProfileViewModel()
     @ObservedObject var loginViewModel: LoginViewModel
-    
-    @State var firstName = ""
-    @State var lastName = ""
-    @State var birthday = Date()
-    @State var showAddTaskView = false
-    @State var showDeleteTaskView = false
 
     var body: some View {
         NavigationView {
             VStack {
                 Text("")
                     .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button("My Contact") {
+                                viewModel.isPresentingContact = true
+                            }
+                            .sheet(isPresented: $viewModel.isPresentingContact) {
+                                MyContactView()
+                            }
+                        }
                         ToolbarItemGroup {
                             Button {
-                                self.showAddTaskView = true
+                                viewModel.showAddTaskView = true
                             } label: {
                                 Image(systemName: "plus")
                             }
                             Button {
-                                self.showDeleteTaskView = true
+                                viewModel.showDeleteTaskView = true
                             } label: {
                                 Image(systemName: "trash.fill")
                             }
                         }
                     }
-                VStack(alignment: .leading) {
-                    TextField("First Name", text: $firstName)
-                        .padding()
-                        .cornerRadius(20.0)
-                        .shadow(radius: 10.0, x: 20, y: 10)
-
-                    TextField("Last Name", text: $lastName)
-                        .padding()
-                        .cornerRadius(20.0)
-                        .shadow(radius: 10.0, x: 20, y: 10)
-
-                    DatePicker("Birthday", selection: $birthday, displayedComponents: [DatePickerComponents.date])
-                        .padding()
-                        .cornerRadius(20.0)
-                        .shadow(radius: 10.0, x: 20, y: 10)
+                VStack {
+                    ProfileImageView(viewModel: viewModel)
+                    Form {
+                        Section(header: Text("About")) {
+                            TextField("First Name", text: $viewModel.firstName)
+                            TextField("Last Name", text: $viewModel.lastName)
+                            DatePicker("Birthday",
+                                       selection: $viewModel.birthday,
+                                       displayedComponents: [DatePickerComponents.date])
+                            Picker(selection: $viewModel.sex,
+                                   label: Text("Sex")) {
+                                Text(OCKBiologicalSex.female.rawValue).tag(OCKBiologicalSex.female)
+                                Text(OCKBiologicalSex.male.rawValue).tag(OCKBiologicalSex.male)
+                                Text(viewModel.sex.rawValue)
+                                    .tag(OCKBiologicalSex.other(viewModel.sexOtherField))
+                            }
+                            TextField("Allergies", text: $viewModel.allergies.wrappedValue)
+                        }
+                        Section(header: Text("Contact")) {
+                            TextField("Street", text: $viewModel.street)
+                            TextField("City", text: $viewModel.city)
+                            TextField("State", text: $viewModel.state)
+                            TextField("Postal code", text: $viewModel.zipcode)
+                            TextField("Email Address", text: $viewModel.emailAddresses)
+                            TextField("Messaging Number", text: $viewModel.messagingNumbers)
+                            TextField("Phone Number", text: $viewModel.phoneNumbers)
+                            TextField("Other Contact Info", text: $viewModel.otherContactInfo)
+                        }
+                    }
                 }
 
                 Button(action: {
                     Task {
-                        do {
-                            try await viewModel.saveProfile(firstName,
-                                                            last: lastName,
-                                                            birth: birthday)
-                        } catch {
-                            Logger.profile.error("Error saving profile: \(error.localizedDescription)")
-                        }
+                            await viewModel.saveProfile()
                     }
                 }, label: {
                     Text("Save Profile")
@@ -93,7 +102,7 @@ struct ProfileView: View {
                 })
                 .background(Color(.red))
                 .cornerRadius(15)
-            }.onReceive(viewModel.$patient, perform: { patient in
+            }/*.onReceive(viewModel.$patient, perform: { patient in
                 if let currentFirstName = patient?.name.givenName {
                     firstName = currentFirstName
                 }
@@ -103,9 +112,9 @@ struct ProfileView: View {
                 if let currentBirthday = patient?.birthday {
                     birthday = currentBirthday
                 }
-            })
-        } .overlay(DeleteTaskView(showDeleteTaskView: self.$showDeleteTaskView))
-            .overlay(AddTaskView(showAddTaskView: self.$showAddTaskView))
+            })*/
+        } .overlay(DeleteTaskView(showDeleteTaskView: self.$viewModel.showDeleteTaskView))
+            .overlay(AddTaskView(showAddTaskView: self.$viewModel.showAddTaskView))
     }
 
 }
