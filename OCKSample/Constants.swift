@@ -67,6 +67,7 @@ enum Constants {
     static let parseConfigFileName = "ParseCareKit"
     static let iOSParseCareStoreName = "iOSParseStore"
     static let iOSLocalCareStoreName = "iOSLocalStore"
+    static let parseRemoteClockIDKey = "requestRemoteClockID"
     static let watchOSParseCareStoreName = "watchOSParseStore"
     static let watchOSLocalCareStoreName = "watchOSLocalStore"
     static let noCareStoreName = "none"
@@ -82,6 +83,11 @@ enum Constants {
 
 enum MainViewPath {
     case tabs
+}
+
+enum CarePlanID: String {
+    case health // Add custom id's for your Care Plans, these are examples
+    case checkIn
 }
 
 enum TaskID {

@@ -39,6 +39,8 @@ import WatchConnectivity
 class AppDelegate: UIResponder, ObservableObject {
     // MARK: Public read/write properties
     var isFirstTimeLogin = false
+    var isFirstAppOpen = true
+    var isFirstLogin = false
 
     // MARK: Public read private write properties
     // swiftlint:disable:next line_length
@@ -71,6 +73,8 @@ class AppDelegate: UIResponder, ObservableObject {
         } catch {
             Logger.appDelegate.error("Error deleting OCKStore: \(error.localizedDescription)")
         }
+        isFirstAppOpen = true
+        isFirstLogin = true
         storeManager = .init(wrapping: OCKStore(name: Constants.noCareStoreName, type: .inMemory))
         healthKitStore = nil
         parseRemote = nil

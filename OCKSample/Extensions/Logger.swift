@@ -17,12 +17,16 @@ extension Logger {
     static let localSessionDelegate = Logger(subsystem: subsystem, category: "LocalSessionDelegate")
     static let utility = Logger(subsystem: subsystem, category: "Utility")
     static let contact = Logger(subsystem: subsystem, category: "Contact")
+    static let myContact = Logger(subsystem: subsystem, category: "MyContact")
     static let login = Logger(subsystem: subsystem, category: "Login")
     static let feed = Logger(subsystem: subsystem, category: "Feed")
     static let watch = Logger(subsystem: subsystem, category: "Watch")
     static let profile = Logger(subsystem: subsystem, category: "Profile")
     static let insights = Logger(subsystem: subsystem, category: "Insights")
     static let ockStore = Logger(subsystem: subsystem, category: "OCKStore+Extension")
+    static let ockSynchronizedStoreManager = Logger(subsystem: subsystem,
+                                                    category: "OCKSynchronizedStoreManager+Extension")
     static let ockHealthKitPassthroughStore = Logger(subsystem: subsystem,
                                                      category: "OCKHealthKitPassthroughStore+Extension")
+    static let task = Logger(subsystem: subsystem, category: "Task")
 }
