@@ -84,6 +84,7 @@ class MyContactViewController: OCKListViewController {
         var query = OCKContactQuery(for: Date())
         query.sortDescriptors.append(.familyName(ascending: true))
         query.sortDescriptors.append(.givenName(ascending: true))
+        query.ids = [personUUIDString]
 
         self.contacts = try await storeManager.store.fetchAnyContacts(query: query)
         self.displayContacts()

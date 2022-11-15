@@ -24,16 +24,16 @@ class ProfileViewModel: ObservableObject {
     @Published var showDeleteTaskView = false
     @Published var sex: OCKBiologicalSex = .other("other")
     @Published var sexOtherField = "other"
-    @Published var allergies: [OCKLabeledValue] = [.init(label: "Allergies", value: "")]
+    @Published var allergies = [""]
     @Published var note = ""
     @Published var street = ""
     @Published var city = ""
     @Published var state = ""
     @Published var zipcode = ""
-    @Published var messagingNumbers = [""]
-    @Published var emailAddresses = [""]
-    @Published var phoneNumbers = [""]
-    @Published var otherContactInfo = [""]
+    @Published var messagingNumbers: [OCKLabeledValue] = [.init(label: "Messaging Numbers", value: "")]
+    @Published var emailAddresses: [OCKLabeledValue] = [.init(label: "Email Addresses", value: "")]
+    @Published var phoneNumbers: [OCKLabeledValue] = [.init(label: "Phone numbers", value: "")]
+    @Published var otherContactInfo: [OCKLabeledValue] = [.init(label: "Other Contact Info", value: "")]
     @Published var isShowingSaveAlert = false
     @Published var isPresentingAddTask = false
     @Published var isPresentingContact = false
@@ -122,7 +122,7 @@ class ProfileViewModel: ObservableObject {
             if let currentMessagingNumbers = newValue?.messagingNumbers {
                 messagingNumbers = currentMessagingNumbers
             } else {
-                messagingNumbers = [""]
+                messagingNumbers =  [.init(label: "Messaging Numbers", value: "")]
             }
             if let currentEmailAddresses = newValue?.emailAddresses {
                 emailAddresses = currentEmailAddresses
@@ -174,6 +174,12 @@ class ProfileViewModel: ObservableObject {
         }
         clearSubscriptions()
 
+        do {
+            try await fetchProfilePicture()
+        } catch {
+            Logger.profile.error("Could not fetch profile image: \(error)")
+        }
+
         // Build query to search for OCKPatient
         // swiftlint:disable:next line_length
         var queryForCurrentPatient = OCKPatientQuery(for: Date()) // This makes the query for the current version of Patient
@@ -182,17 +188,69 @@ class ProfileViewModel: ObservableObject {
         do {
             guard let appDelegate = AppDelegateKey.defaultValue,
                   let foundPatient = try await appDelegate.store?.fetchPatients(query: queryForCurrentPatient),
-                let currentPatient = foundPatient.first else {
+                  let currentPatient = foundPatient.first else {
                 // swiftlint:disable:next line_length
                 Logger.profile.error("Could not find patient with id \"\(uuid)\". It's possible they have never been saved.")
                 return
             }
             self.observePatient(currentPatient)
+
+            // Query the contact also so the user can edit
+            var queryForCurrentContact = OCKContactQuery(for: Date())
+            queryForCurrentContact.ids = [uuid.uuidString]
+            guard let foundContact = try await appDelegate.store?.fetchContacts(query: queryForCurrentContact),
+                let currentContact = foundContact.first else {
+                // swiftlint:disable:next line_length
+                Logger.profile.error("Error: Could not find contact with id \"\(uuid)\". It's possible they have never been saved.")
+                return
+            }
+            self.observeContact(currentContact)
+
         } catch {
             // swiftlint:disable:next line_length
             Logger.profile.error("Could not find patient with id \"\(uuid)\". It's possible they have never been saved. Query error: \(error.localizedDescription)")
         }
     }
+
+    @MainActor
+        private func findAndObserveCurrentContact() async {
+            guard let uuid = try? Utility.getRemoteClockUUID() else {
+                Logger.profile.error("Could not get remote uuid for this user.")
+                return
+            }
+            clearSubscriptions()
+
+            // Build query to search for OCKPatient
+            // swiftlint:disable:next line_length
+            var queryForCurrentPatient = OCKPatientQuery(for: Date()) // This makes the query for the current version of Patient
+            queryForCurrentPatient.ids = [uuid.uuidString] // Search for the current logged in user
+            do {
+                guard let appDelegate = AppDelegateKey.defaultValue,
+                      let foundPatient = try await appDelegate.store?.fetchPatients(query: queryForCurrentPatient),
+                    let currentPatient = foundPatient.first else {
+                    // swiftlint:disable:next line_length
+                    Logger.profile.error("Could not find patient with id \"\(uuid)\". It's possible they have never been saved.")
+                    return
+                }
+                self.observePatient(currentPatient)
+
+                // Query the contact also so the user can edit
+                var queryForCurrentContact = OCKContactQuery(for: Date())
+                queryForCurrentContact.ids = [uuid.uuidString]
+                guard let foundContact = try await appDelegate.store?.fetchContacts(query: queryForCurrentContact),
+                    let currentContact = foundContact.first else {
+                    // swiftlint:disable:next line_length
+                    Logger.profile.error("Error: Could not find contact with id \"\(uuid)\". It's possible they have never been saved.")
+                    return
+                }
+                self.observeContact(currentContact)
+
+                try? await fetchProfilePicture()
+            } catch {
+                // swiftlint:disable:next line_length
+                Logger.profile.error("Could not find patient with id \"\(uuid)\". It's possible they have never been saved. Query error: \(error.localizedDescription)")
+            }
+        }
 
     @MainActor
     private func observeContact(_ contact: OCKContact) {
@@ -215,13 +273,39 @@ class ProfileViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
+    @MainActor
+    private func fetchProfilePicture() async throws {
+
+         // Profile pics are stored in Parse User.
+        guard let currentUser = try await User.current?.fetch() else {
+            Logger.profile.error("User is not logged in")
+            return
+        }
+
+        if let pictureFile = currentUser.profilePicture {
+
+            // Download picture from server if needed
+            do {
+                let profilePicture = try await pictureFile.fetch()
+                guard let path = profilePicture.localURL?.relativePath else {
+                    Logger.profile.error("Could not find relative path for profile picture.")
+                    return
+                }
+                self.profileUIImage = UIImage(contentsOfFile: path)
+            } catch {
+                Logger.profile.error("Could not fetch profile picture: \(error.localizedDescription).")
+            }
+        }
+        self.isSettingProfilePictureForFirstTime = false
+    }
+
 }
 
 // MARK: User intentional behavior
 extension ProfileViewModel {
     @MainActor
     func saveProfile() async {
-        alertMessage = "All changs saved successfully!"
+        alertMessage = "All changes saved successfully!"
         do {
             try await savePatient()
             try await saveContact()
@@ -232,6 +316,7 @@ extension ProfileViewModel {
     }
 
     @MainActor
+    // swiftlint:disable:next cyclomatic_complexity
     func savePatient() async throws {
         if var patientToUpdate = patient {
             // If there is a currentPatient that was fetched, check to see if any of the fields changed
@@ -256,7 +341,7 @@ extension ProfileViewModel {
                 patientHasBeenUpdated = true
                 patientToUpdate.sex = sex
             }
-            
+
             if patient?.allergies != allergies {
                 patientHasBeenUpdated = true
                 patientToUpdate.allergies = allergies
@@ -304,6 +389,7 @@ extension ProfileViewModel {
     }
 
     @MainActor
+    // swiftlint:disable:next cyclomatic_complexity
     func saveContact() async throws {
 
         if var contactToUpdate = contact {
@@ -328,27 +414,27 @@ extension ProfileViewModel {
                 contactHasBeenUpdated = true
                 contactToUpdate.address = potentialAddress
             }
-            
+
             if contact?.phoneNumbers != phoneNumbers {
                 contactHasBeenUpdated = true
                 contactToUpdate.phoneNumbers = phoneNumbers
             }
-            
+
             if contact?.messagingNumbers != messagingNumbers {
                 contactHasBeenUpdated = true
                 contactToUpdate.messagingNumbers = messagingNumbers
             }
-            
+
             if contact?.emailAddresses != emailAddresses {
                 contactHasBeenUpdated = true
                 contactToUpdate.emailAddresses = emailAddresses
             }
-            
+
             if contact?.otherContactInfo != otherContactInfo {
                 contactHasBeenUpdated = true
                 contactToUpdate.otherContactInfo = otherContactInfo
             }
-            
+
             if contactHasBeenUpdated {
                 let updated = try await storeManager.store.updateAnyContact(contactToUpdate)
                 Logger.profile.info("Successfully updated contact")
@@ -358,7 +444,6 @@ extension ProfileViewModel {
                 }
                 self.contact = updatedContact
             }
-
         } else {
 
             guard let remoteUUID = try? Utility.getRemoteClockUUID().uuidString else {
@@ -383,5 +468,6 @@ extension ProfileViewModel {
             self.contact = addedContact
             self.observeContact(addedContact)
         }
+
     }
 }

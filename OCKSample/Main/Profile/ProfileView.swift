@@ -58,17 +58,17 @@ struct ProfileView: View {
                                 Text(viewModel.sex.rawValue)
                                     .tag(OCKBiologicalSex.other(viewModel.sexOtherField))
                             }
-                            TextField("Allergies", text: $viewModel.allergies.wrappedValue)
+                            TextField("Allergies", text: $viewModel.allergies[0])
                         }
                         Section(header: Text("Contact")) {
                             TextField("Street", text: $viewModel.street)
                             TextField("City", text: $viewModel.city)
                             TextField("State", text: $viewModel.state)
                             TextField("Postal code", text: $viewModel.zipcode)
-                            TextField("Email Address", text: $viewModel.emailAddresses)
-                            TextField("Messaging Number", text: $viewModel.messagingNumbers)
-                            TextField("Phone Number", text: $viewModel.phoneNumbers)
-                            TextField("Other Contact Info", text: $viewModel.otherContactInfo)
+                            TextField("Email Address", text: $viewModel.emailAddresses[0].value)
+                            TextField("Messaging Number", text: $viewModel.messagingNumbers[0].value)
+                            TextField("Phone Number", text: $viewModel.phoneNumbers[0].value)
+                            TextField("Other Contact Info", text: $viewModel.otherContactInfo[0].value)
                         }
                     }
                 }
@@ -102,7 +102,16 @@ struct ProfileView: View {
                 })
                 .background(Color(.red))
                 .cornerRadius(15)
-            }/*.onReceive(viewModel.$patient, perform: { patient in
+            }.sheet(isPresented: $viewModel.isPresentingImagePicker) {
+                ImagePicker(image: $viewModel.profileUIImage)
+            } .alert(isPresented: $viewModel.isShowingSaveAlert) {
+                return Alert(title: Text("Update"),
+                             message: Text(viewModel.alertMessage),
+                             dismissButton: .default(Text("Ok"), action: {
+                    viewModel.isShowingSaveAlert = false
+                }))
+            }
+            /*.onReceive(viewModel.$patient, perform: { patient in
                 if let currentFirstName = patient?.name.givenName {
                     firstName = currentFirstName
                 }

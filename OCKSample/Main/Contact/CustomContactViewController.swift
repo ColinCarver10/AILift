@@ -110,7 +110,7 @@ class CustomContactViewController: OCKListViewController {
         // XTODO: Modify this filter to not show the contact info for this user
         let filterdContacts = convertedContacts.filter { convertedContact in
             Logger.contact.info("Contact filtered: \(convertedContact.id)")
-            return true
+            return convertedContact.id != personUUIDString
         }
 
         self.clearAndKeepSearchBar()

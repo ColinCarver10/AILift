@@ -23,12 +23,14 @@
 		66966DCC2913273A00A4608F /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCB2913273900A4608F /* AddTaskViewModel.swift */; };
 		66966DCE2913279D00A4608F /* DeleteTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCD2913279D00A4608F /* DeleteTaskView.swift */; };
 		66966DD0291327A900A4608F /* DeleteTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCF291327A900A4608F /* DeleteTaskViewModel.swift */; };
+		6696A41229233DBF001C6C5A /* OCKSynchronizedStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696A41129233DBF001C6C5A /* OCKSynchronizedStoreManager.swift */; };
 		6696D75F28FDFD9F00C7E7A4 /* AnimationStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696D75E28FDFD9F00C7E7A4 /* AnimationStyle.swift */; };
 		6696D76328FDFDF700C7E7A4 /* DimensionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696D76228FDFDF700C7E7A4 /* DimensionStyle.swift */; };
 		6696D76428FDFDF700C7E7A4 /* DimensionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696D76228FDFDF700C7E7A4 /* DimensionStyle.swift */; };
 		6696D76528FDFDFB00C7E7A4 /* AnimationStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696D75E28FDFD9F00C7E7A4 /* AnimationStyle.swift */; };
 		6696D76728FE33F400C7E7A4 /* ColorPalette in Resources */ = {isa = PBXBuildFile; fileRef = 6696D76628FE33F400C7E7A4 /* ColorPalette */; };
 		6696D76828FE33F400C7E7A4 /* ColorPalette in Resources */ = {isa = PBXBuildFile; fileRef = 6696D76628FE33F400C7E7A4 /* ColorPalette */; };
+		66A9E0812923E38700311D1A /* OCKSynchronizedStoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6696A41129233DBF001C6C5A /* OCKSynchronizedStoreManager.swift */; };
 		70077597252228E900EC0EDA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70077596252228E900EC0EDA /* User.swift */; };
 		7007759B252229C900EC0EDA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70077596252228E900EC0EDA /* User.swift */; };
 		70202EC12807333900CF73FB /* CareKit in Frameworks */ = {isa = PBXBuildFile; productRef = 70202EC02807333900CF73FB /* CareKit */; };
@@ -184,6 +186,7 @@
 		66966DCB2913273900A4608F /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
 		66966DCD2913279D00A4608F /* DeleteTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTaskView.swift; sourceTree = "<group>"; };
 		66966DCF291327A900A4608F /* DeleteTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTaskViewModel.swift; sourceTree = "<group>"; };
+		6696A41129233DBF001C6C5A /* OCKSynchronizedStoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCKSynchronizedStoreManager.swift; sourceTree = "<group>"; };
 		6696D75E28FDFD9F00C7E7A4 /* AnimationStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationStyle.swift; sourceTree = "<group>"; };
 		6696D76228FDFDF700C7E7A4 /* DimensionStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DimensionStyle.swift; sourceTree = "<group>"; };
 		6696D76628FE33F400C7E7A4 /* ColorPalette */ = {isa = PBXFileReference; lastKnownFileType = text; path = ColorPalette; sourceTree = "<group>"; };
@@ -496,6 +499,7 @@
 				70F03A9827860A0800E5AFB4 /* OCKSynchronizedStoreManager+Publishers.swift */,
 				7083A855279CA40A00B3832E /* PCKUtility.swift */,
 				6626BCA4291C1D6D000ECFE1 /* OCKBiologicalSex+Hashable.swift */,
+				6696A41129233DBF001C6C5A /* OCKSynchronizedStoreManager.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -793,6 +797,7 @@
 				7083A857279CA40F00B3832E /* PCKUtility.swift in Sources */,
 				91AD923924A4C42D00925D4D /* OCKWatchSampleApp.swift in Sources */,
 				70F03AA627860B2500E5AFB4 /* OCKPatient+Parse.swift in Sources */,
+				66A9E0812923E38700311D1A /* OCKSynchronizedStoreManager.swift in Sources */,
 				70221F3828D8C0CB00971195 /* AppDelegateKey.swift in Sources */,
 				9103AA5227B8C913002C921E /* FontColorKey.swift in Sources */,
 				6696D76528FDFDFB00C7E7A4 /* AnimationStyle.swift in Sources */,
@@ -827,6 +832,7 @@
 				70F921AC27CABE3000368CEC /* SessionDelegate.swift in Sources */,
 				70F0EFEA28C2EE6C0005B5A2 /* AppDelegateKey.swift in Sources */,
 				7036E64025717F85006E9A3C /* Constants.swift in Sources */,
+				6696A41229233DBF001C6C5A /* OCKSynchronizedStoreManager.swift in Sources */,
 				918FDEBC271B4E4A0045A0EF /* Calendar+Dates.swift in Sources */,
 				6626BC9B291AA486000ECFE1 /* ContactViewModel.swift in Sources */,
 				70F03AA127860AB700E5AFB4 /* OCKOutcome.swift in Sources */,
