@@ -67,6 +67,7 @@ enum Constants {
     static let parseConfigFileName = "ParseCareKit" // -heroku
     static let iOSParseCareStoreName = "iOSParseStore"
     static let iOSLocalCareStoreName = "iOSLocalStore"
+    static let parseRemoteClockIDKey = "requestRemoteClockID"
     static let watchOSParseCareStoreName = "watchOSParseStore"
     static let watchOSLocalCareStoreName = "watchOSLocalStore"
     static let noCareStoreName = "none"

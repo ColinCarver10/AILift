@@ -1,9 +1,9 @@
 //
-//  ContactView.swift
+//  MyContactView.swift
 //  OCKSample
 //
-//  Created by Corey Baker on 11/25/20.
-//  Copyright © 2020 Network Reconnaissance Lab. All rights reserved.
+//  Created by Corey Baker on 11/8/22.
+//  Copyright © 2022 Network Reconnaissance Lab. All rights reserved.
 //
 
 import SwiftUI
@@ -12,11 +12,11 @@ import CareKit
 import CareKitStore
 import os.log
 
-struct ContactView: UIViewControllerRepresentable {
+struct MyContactView: UIViewControllerRepresentable {
     @State var storeManager = StoreManagerKey.defaultValue
 
     func makeUIViewController(context: Context) -> some UIViewController {
-        let viewController = CustomContactViewController(storeManager: storeManager)
+        let viewController = MyContactViewController(storeManager: storeManager)
         return UINavigationController(rootViewController: viewController)
     }
 
@@ -24,10 +24,10 @@ struct ContactView: UIViewControllerRepresentable {
                                 context: Context) {}
 }
 
-struct ContactView_Previews: PreviewProvider {
+struct MyContactView_Previews: PreviewProvider {
 
     static var previews: some View {
-        ContactView(storeManager: Utility.createPreviewStoreManager())
+        MyContactView(storeManager: Utility.createPreviewStoreManager())
             .accentColor(Color(TintColorKey.defaultValue))
     }
 }

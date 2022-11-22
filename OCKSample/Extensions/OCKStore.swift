@@ -74,6 +74,7 @@ extension OCKStore {
         }
         return results
     }
+   }
 
     func addContactsIfNotPresent(_ contacts: [OCKContact]) async throws {
         let contactIdsToAdd = contacts.compactMap { $0.id }
