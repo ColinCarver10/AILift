@@ -75,10 +75,12 @@ enum Constants {
     static let requestSync = "requestSync"
     static let progressUpdate = "progressUpdate"
     static let finishedAskingForPermission = "finishedAskingForPermission"
+    static let shouldRefreshView = "shouldRefreshView"
     static let completedFirstSyncAfterLogin = "completedFirstSyncAfterLogin"
     static let userLoggedIn = "userLoggedIn"
     static let storeInitialized = "storeInitialized"
     static let userTypeKey = "userType"
+    static let card = "card"
 }
 
 enum MainViewPath {
@@ -90,12 +92,26 @@ enum CarePlanID: String {
     case checkIn
 }
 
+enum CareKitCard: String, CaseIterable, Identifiable {
+    var id: Self { self }
+    case button = "Button"
+    case checklist = "Checklist"
+    case featured = "Featured"
+    case grid = "Grid"
+    case instruction = "Instruction"
+    case labeledValue = "Labeled Value"
+    case link = "Link"
+    case numericProgress = "Numeric Progress"
+    case simple = "Simple"
+}
+
 enum TaskID {
     static let doxylamine = "doxylamine"
     static let nausea = "nausea"
     static let stretch = "stretch"
     static let kegels = "kegels"
     static let steps = "steps"
+    static let onboarding = "onboarding"
 
     static var ordered: [String] {
         [Self.steps, Self.doxylamine, Self.kegels, Self.stretch, Self.nausea]
