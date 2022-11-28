@@ -20,21 +20,14 @@ struct Onboard: Surveyable {
 
 #if canImport(ResearchKit)
 extension Onboard {
-    /*
-     TODO: Modify the onboarding so it properly represents the
-     usecase of your application. Changes should be made to
-     each of the steps in this type method. For example, you
-     should change: title, detailText, image, and imageContentMode,
-     and learnMoreItem.
-     */
     func createSurvey() -> ORKTask {
         // The Welcome Instruction step.
         let welcomeInstructionStep = ORKInstructionStep(
             identifier: "\(identifier()).welcome"
         )
 
-        welcomeInstructionStep.title = "Welcome!"
-        welcomeInstructionStep.detailText = "Thank you for joining our study. Tap Next to learn more before signing up."
+        welcomeInstructionStep.title = "Welcome to AI Lifting!"
+        welcomeInstructionStep.detailText = "Thank you for joining AI Lifting. Tap Next to start your set up."
         welcomeInstructionStep.image = UIImage(named: "welcome-image")
         welcomeInstructionStep.imageContentMode = .scaleAspectFill
 
@@ -43,11 +36,11 @@ extension Onboard {
             identifier: "\(identifier()).overview"
         )
 
-        studyOverviewInstructionStep.title = "Before You Join"
-        studyOverviewInstructionStep.iconImage = UIImage(systemName: "checkmark.seal.fill")
+        studyOverviewInstructionStep.title = "Set Up"
+        studyOverviewInstructionStep.iconImage = UIImage(systemName: "figure.run")
 
         let heartBodyItem = ORKBodyItem(
-            text: "The study will ask you to share some of your health data.",
+            text: "AI Lifting will ask you to share some of your health data.",
             detailText: nil,
             image: UIImage(systemName: "heart.fill"),
             learnMoreItem: nil,
@@ -55,9 +48,9 @@ extension Onboard {
         )
 
         let completeTasksBodyItem = ORKBodyItem(
-            text: "You will be asked to complete various tasks over the duration of the study.",
+            text: "These tasks will personalize your workout plan to best fit your needs.",
             detailText: nil,
-            image: UIImage(systemName: "checkmark.circle.fill"),
+            image: UIImage(systemName: "slider.vertical.3"),
             learnMoreItem: nil,
             bodyItemStyle: .image
         )
@@ -93,12 +86,12 @@ extension Onboard {
 
         webViewStep.showSignatureAfterContent = true
 
-        // The Request Permissions step.
-        // TODO: Set these to HealthKit info you want to display
-        // by default.
         let healthKitTypesToWrite: Set<HKSampleType> = [
             .quantityType(forIdentifier: .bodyMassIndex)!,
             .quantityType(forIdentifier: .activeEnergyBurned)!,
+            .quantityType(forIdentifier: .vo2Max)!,
+            .quantityType(forIdentifier: .activeEnergyBurned)!,
+            .quantityType(forIdentifier: .heartRate)!,
             .workoutType()
         ]
 
@@ -106,7 +99,10 @@ extension Onboard {
             .characteristicType(forIdentifier: .dateOfBirth)!,
             .workoutType(),
             .quantityType(forIdentifier: .appleStandTime)!,
-            .quantityType(forIdentifier: .appleExerciseTime)!
+            .quantityType(forIdentifier: .appleExerciseTime)!,
+            .quantityType(forIdentifier: .vo2Max)!,
+            .quantityType(forIdentifier: .activeEnergyBurned)!,
+            .quantityType(forIdentifier: .heartRate)!
         ]
 
         let healthKitPermissionType = ORKHealthKitPermissionType(
@@ -139,8 +135,7 @@ extension Onboard {
         )
 
         completionStep.title = "Enrollment Complete"
-        // swiftlint:disable:next line_length
-        completionStep.text = "Thank you for enrolling in this study. Your participation will contribute to meaningful research!"
+        completionStep.text = "Thank you for joining AI Lifting. Your customized workout plan awaits you."
 
         let surveyTask = ORKOrderedTask(
             identifier: identifier(),

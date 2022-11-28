@@ -10,12 +10,6 @@ import Foundation
 
 // swiftlint:disable line_length
 
-/*
- TODO: The informedConsentHTML property allows you to display HTML
- on an ResearchKit Survey. Modify the consent so it properly
- represents the usecase of your application.
- */
-
 let informedConsentHTML = """
     <!DOCTYPE html>
     <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -30,24 +24,14 @@ let informedConsentHTML = """
     </head>
     <body>
         <h1>Informed Consent</h1>
-        <h3>Study Expectations</h3>
+        <h2>Warning</h2>
         <ul>
-            <li>You will be asked to complete various study tasks such as surveys.</li>
-            <li>The study will send you notifications to remind you to complete these study tasks.</li>
-            <li>You will be asked to share various health data types to support the study goals.</li>
-            <li>The study is expected to last 4 years.</li>
-            <li>The study may reach out to you for future research opportunities.</li>
-            <li>Your information will be kept private and secure.</li>
-            <li>You can withdraw from the study at any time.</li>
+            <li>Not all exercises are suitable for everyone and this or any other exercise program may result in injury. PLEASE ALWAYS consult your DOCTOR before beginning this or any other exercise program, especially if you have any chronic or recurring condition, and/or if you are pregnant, nursing, or elderly. This exercise program is NOT recommended if you experience chest pains or have uncontrolled blood pressure or other uncontrolled chronic diseases.</li>
+            <li>By performing any of the exercises in this program, you assume ALL risks of injury from doing so. Sno-Valley Senior Center is NOT responsible or liable for any injury or loss you may sustain by participating in this exercise program..</li>
+            <li>ALWAYS warm up before beginning any workout and NEVER exercise beyond the level at which you feel comfortable.</li>
+            <li>PLEASE stop exercising immediately if you experience pain, soreness, fatigue, shortness of breath, dizziness, lightheadedness, blurred vision, headache, nausea, sickness, illness, dehydration, excessive sweating, or any other discomfort. If any of these symptoms persists after you stop exercising, please seek medical help immediately. </li>
         </ul>
-        <h3>Eligibility Requirements</h3>
-        <ul>
-            <li>Must be 18 years or older.</li>
-            <li>Must be able to read and understand English.</li>
-            <li>Must be the only user of the device on which you are participating in the study.</li>
-            <li>Must be able to sign your own consent form.</li>
-        </ul>
-        <p>By signing below, I acknowledge that I have read this consent carefully, that I understand all of its terms, and that I enter into this study voluntarily. I understand that my information will only be used and disclosed for the purposes described in the consent and I can withdraw from the study at any time.</p>
+        <p>By signing below, I acknowledge that I have read this consent carefully, that I understand all of its terms, and that I assume all responsiblity for my actions. I understand that my information will only be used and disclosed for the purposes described in the consent and I can withdraw from the app at any time.</p>
         <p>Please sign using your finger below.</p>
         <br>
     </body>
