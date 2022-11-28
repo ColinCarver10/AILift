@@ -136,13 +136,15 @@ class CareViewController: OCKDailyPageViewController {
                                           prepare listViewController: OCKListViewController, for date: Date) {
         Task {
             guard await checkIfOnboardingIsComplete() else {
-                let onboardCard = OCKSurveyTaskViewController(
-                                    taskID: TaskID.onboarding,
-                                    eventQuery: OCKEventQuery(for: date),
-                                    storeManager: self.storeManager,
-                                    survey: Surveys.onboardingSurvey(),
-                                    extractOutcome: { _ in [OCKOutcomeValue(Date())] }
-                                )
+                let onboardSurvey = Onboard()
+                let onboardCard = OCKSurveyTaskViewController(taskID: onboardSurvey.identifier(),
+                                                              eventQuery: OCKEventQuery(for: date),
+                                                              storeManager: self.storeManager,
+                                                              survey: onboardSurvey.createSurvey(),
+                                                              extractOutcome: onboardSurvey.extractAnswers)
+                if let carekitView = onboardCard.view as? OCKView {
+                    carekitView.customStyle = CustomStylerKey.defaultValue
+                }
                 onboardCard.surveyDelegate = self
 
                 listViewController.appendViewController(
@@ -296,6 +298,20 @@ class CareViewController: OCKDailyPageViewController {
                                                      title: "College of Engineering")])
             return [linkView.formattedHostingController()]
 
+        case .survey:
+            guard let surveyTask = task as? OCKTask else {
+                Logger.feed.error("Can only use a survey for an \"OCKTask\", not \(task.id)")
+                return nil
+            }
+
+            let surveyCard = OCKSurveyTaskViewController(taskID: surveyTask.survey.type().identifier(),
+                                                         eventQuery: OCKEventQuery(for: date),
+                                                         storeManager: self.storeManager,
+                                                         survey: surveyTask.survey.type().createSurvey(),
+                                                         viewSynchronizer: SurveyViewSynchronizer(),
+                                                         extractOutcome: surveyTask.survey.type().extractAnswers)
+            surveyCard.surveyDelegate = self
+            return [surveyCard]
         default:
             // Check if a healthKit task
             guard task is OCKHealthKitTask else {
@@ -320,7 +336,7 @@ class CareViewController: OCKDailyPageViewController {
         do {
             let tasks = try await storeManager.store.fetchAnyTasks(query: query)
             // Remove onboarding tasks from array
-            return tasks.filter { $0.id != TaskID.onboarding }
+            return tasks.filter { $0.id != Onboard.identifier() }
         } catch {
             Logger.feed.error("\(error.localizedDescription, privacy: .public)")
             return []
@@ -330,7 +346,7 @@ class CareViewController: OCKDailyPageViewController {
     @MainActor
     private func checkIfOnboardingIsComplete() async -> Bool {
         var query = OCKOutcomeQuery()
-        query.taskIDs = [TaskID.onboarding]
+        query.taskIDs = [Onboard.identifier()]
 
         guard let store = AppDelegateKey.defaultValue?.store else {
             Logger.feed.error("CareKit store could not be unwrapped")

@@ -64,10 +64,9 @@ extension AppError: LocalizedError {
 }
 
 enum Constants {
-    static let parseConfigFileName = "ParseCareKit"
+    static let parseConfigFileName = "ParseCareKit" // -heroku
     static let iOSParseCareStoreName = "iOSParseStore"
     static let iOSLocalCareStoreName = "iOSLocalStore"
-    static let parseRemoteClockIDKey = "requestRemoteClockID"
     static let watchOSParseCareStoreName = "watchOSParseStore"
     static let watchOSLocalCareStoreName = "watchOSLocalStore"
     static let noCareStoreName = "none"
@@ -81,15 +80,11 @@ enum Constants {
     static let storeInitialized = "storeInitialized"
     static let userTypeKey = "userType"
     static let card = "card"
+    static let survey = "survey"
 }
 
 enum MainViewPath {
     case tabs
-}
-
-enum CarePlanID: String {
-    case health // Add custom id's for your Care Plans, these are examples
-    case checkIn
 }
 
 enum CareKitCard: String, CaseIterable, Identifiable {
@@ -103,6 +98,13 @@ enum CareKitCard: String, CaseIterable, Identifiable {
     case link = "Link"
     case numericProgress = "Numeric Progress"
     case simple = "Simple"
+    case survey = "Survey"
+}
+
+enum CarePlanID: String, CaseIterable, Identifiable {
+    var id: Self { self }
+    case health // Add custom id's for your Care Plans, these are examples
+    case checkIn
 }
 
 enum TaskID {
@@ -111,7 +113,6 @@ enum TaskID {
     static let stretch = "stretch"
     static let kegels = "kegels"
     static let steps = "steps"
-    static let onboarding = "onboarding"
 
     static var ordered: [String] {
         [Self.steps, Self.doxylamine, Self.kegels, Self.stretch, Self.nausea]

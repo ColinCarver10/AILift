@@ -1,24 +1,36 @@
 //
-//  Surveys.swift
+//  Onboarding.swift
 //  OCKSample
 //
 //  Created by Corey Baker on 11/11/22.
 //  Copyright © 2022 Network Reconnaissance Lab. All rights reserved.
 //
 
+import Foundation
 import CareKitStore
+#if canImport(ResearchKit)
 import ResearchKit
+#endif
 
-struct Surveys {
+struct Onboard: Surveyable {
+    static var surveyType: Survey {
+        Survey.onboard
+    }
+}
 
-    private init() {}
-
-    // MARK: Onboarding
-    static func onboardingSurvey() -> ORKTask {
-
+#if canImport(ResearchKit)
+extension Onboard {
+    /*
+     TODO: Modify the onboarding so it properly represents the
+     usecase of your application. Changes should be made to
+     each of the steps in this type method. For example, you
+     should change: title, detailText, image, and imageContentMode,
+     and learnMoreItem.
+     */
+    func createSurvey() -> ORKTask {
         // The Welcome Instruction step.
         let welcomeInstructionStep = ORKInstructionStep(
-            identifier: "onboarding.welcome"
+            identifier: "\(identifier()).welcome"
         )
 
         welcomeInstructionStep.title = "Welcome!"
@@ -28,7 +40,7 @@ struct Surveys {
 
         // The Informed Consent Instruction step.
         let studyOverviewInstructionStep = ORKInstructionStep(
-            identifier: "onboarding.overview"
+            identifier: "\(identifier()).overview"
         )
 
         studyOverviewInstructionStep.title = "Before You Join"
@@ -75,24 +87,26 @@ struct Surveys {
 
         // The Signature step (using WebView).
         let webViewStep = ORKWebViewStep(
-            identifier: "onboarding.signatureCapture",
+            identifier: "\(identifier()).signatureCapture",
             html: informedConsentHTML
         )
 
         webViewStep.showSignatureAfterContent = true
 
         // The Request Permissions step.
+        // TODO: Set these to HealthKit info you want to display
+        // by default.
         let healthKitTypesToWrite: Set<HKSampleType> = [
-            HKObjectType.quantityType(forIdentifier: .bodyMassIndex)!,
-            HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
-            HKObjectType.workoutType()
+            .quantityType(forIdentifier: .bodyMassIndex)!,
+            .quantityType(forIdentifier: .activeEnergyBurned)!,
+            .workoutType()
         ]
 
         let healthKitTypesToRead: Set<HKObjectType> = [
-            HKObjectType.characteristicType(forIdentifier: .dateOfBirth)!,
-            HKObjectType.workoutType(),
-            HKObjectType.quantityType(forIdentifier: .appleStandTime)!,
-            HKObjectType.quantityType(forIdentifier: .appleExerciseTime)!
+            .characteristicType(forIdentifier: .dateOfBirth)!,
+            .workoutType(),
+            .quantityType(forIdentifier: .appleStandTime)!,
+            .quantityType(forIdentifier: .appleExerciseTime)!
         ]
 
         let healthKitPermissionType = ORKHealthKitPermissionType(
@@ -107,7 +121,7 @@ struct Surveys {
         let motionPermissionType = ORKMotionActivityPermissionType()
 
         let requestPermissionsStep = ORKRequestPermissionsStep(
-            identifier: "onboarding.requestPermissionsStep",
+            identifier: "\(identifier()).requestPermissionsStep",
             permissionTypes: [
                 healthKitPermissionType,
                 notificationsPermissionType,
@@ -121,7 +135,7 @@ struct Surveys {
 
         // Completion Step
         let completionStep = ORKCompletionStep(
-            identifier: "onboarding.completionStep"
+            identifier: "\(identifier()).completionStep"
         )
 
         completionStep.title = "Enrollment Complete"
@@ -129,7 +143,7 @@ struct Surveys {
         completionStep.text = "Thank you for enrolling in this study. Your participation will contribute to meaningful research!"
 
         let surveyTask = ORKOrderedTask(
-            identifier: "onboard",
+            identifier: identifier(),
             steps: [
                 welcomeInstructionStep,
                 studyOverviewInstructionStep,
@@ -138,7 +152,14 @@ struct Surveys {
                 completionStep
             ]
         )
-
         return surveyTask
     }
+
+    func extractAnswers(_ result: ORKTaskResult) -> [CareKitStore.OCKOutcomeValue]? {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            Utility.requestHealthKitPermissions()
+        }
+        return [OCKOutcomeValue(Date())]
+    }
 }
+#endif

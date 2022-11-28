@@ -5,9 +5,17 @@
 //  Created by Corey Baker on 11/11/22.
 //  Copyright © 2022 Network Reconnaissance Lab. All rights reserved.
 //
+
 import Foundation
 
 // swiftlint:disable line_length
+
+/*
+ TODO: The informedConsentHTML property allows you to display HTML
+ on an ResearchKit Survey. Modify the consent so it properly
+ represents the usecase of your application.
+ */
+
 let informedConsentHTML = """
     <!DOCTYPE html>
     <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -41,6 +49,7 @@ let informedConsentHTML = """
         </ul>
         <p>By signing below, I acknowledge that I have read this consent carefully, that I understand all of its terms, and that I enter into this study voluntarily. I understand that my information will only be used and disclosed for the purposes described in the consent and I can withdraw from the study at any time.</p>
         <p>Please sign using your finger below.</p>
+        <br>
     </body>
     </html>
     """

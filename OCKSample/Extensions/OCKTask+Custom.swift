@@ -27,4 +27,21 @@ extension OCKTask {
             userInfo?[Constants.card] = newValue.rawValue
         }
     }
+    var survey: Survey {
+        get {
+            guard let surveyInfo = userInfo?[Constants.survey],
+                  let surveyType = Survey(rawValue: surveyInfo) else {
+                return .checkIn // Default survey if none was saved
+            }
+            return surveyType // Saved survey type
+        }
+        set {
+            if userInfo == nil {
+                // Initialize userInfo with empty dictionary
+                userInfo = .init()
+            }
+            // Set the new card type
+            userInfo?[Constants.survey] = newValue.rawValue
+        }
+    }
 }
