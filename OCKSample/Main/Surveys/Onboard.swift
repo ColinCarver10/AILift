@@ -126,8 +126,7 @@ extension Onboard {
         )
 
         requestPermissionsStep.title = "Health Data Request"
-        // swiftlint:disable:next line_length
-        requestPermissionsStep.text = "Please review the health data types below and enable sharing to contribute to the study."
+        requestPermissionsStep.text = "Please review the health data types below and enable sharing."
 
         // Completion Step
         let completionStep = ORKCompletionStep(
