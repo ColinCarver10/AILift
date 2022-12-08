@@ -135,3 +135,13 @@ enum UserType: String, Codable {
 enum InstallationChannel: String {
     case global
 }
+
+enum TaskType: String, CaseIterable, Identifiable {
+    case task, healthKitTask
+    var id: String { self.rawValue }
+}
+
+enum Day: String, CaseIterable, Identifiable {
+    case monday, tuesday, wednesday, thursday, friday, saturday, sunday
+    var id: String { self.rawValue }
+}

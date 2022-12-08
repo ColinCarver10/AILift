@@ -19,8 +19,8 @@ extension AppDelegate: ParseRemoteDelegate {
 
     func successfullyPushedDataToCloud() {
         if isFirstTimeLogin {
-            // swiftlint:disable:next line_length
-            NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.completedFirstSyncAfterLogin)))
+            // Notify views they should refresh tasks if needed
+            NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.shouldRefreshView)))
             isFirstTimeLogin.toggle()
         }
         #if !targetEnvironment(simulator)
