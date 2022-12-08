@@ -16,13 +16,20 @@ import HealthKit
 class AddTaskViewModel: ObservableObject {
 
     @Published var error: AppError?
+    @Published var taskSchedule = Date()
+    @Published var title: String = ""
+    @Published var instructions: String = ""
+    @Published var selectedCard: CareKitCard = .button
+
+    @Published var healthKitTaskType: HKQuantityTypeIdentifier = .appleSleepingWristTemperature
+
+    @Published var selectedAsset: String = "figure.walk"
+
+    @Published var selectedDay: Day = .monday
 
     // MARK: Intents
 
-    func addTask(title: String,
-                 instructions: String,
-                 taskSchedule: Date,
-                 selectedAsset: String) async {
+    func addTask() async {
         guard let appDelegate = AppDelegateKey.defaultValue else {
             error =  AppError.couldntBeUnwrapped
             return
@@ -39,20 +46,19 @@ class AddTaskViewModel: ObservableObject {
                                       schedule: schedule)
         task.instructions = instructions
         task.asset = selectedAsset
+        task.card = selectedCard
 
         do {
             try await appDelegate.store?.addTasksIfNotPresent([task])
+            // Notify views they should refresh tasks if needed
+            NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.shouldRefreshView)))
         } catch {
             // swiftlint:disable:next line_length superfluous_disable_command
             self.error = AppError.errorString("Couldn't add task: \(error.localizedDescription)")
         }
     }
 
-    func addHealthKitTask(title: String,
-                          instructions: String,
-                          taskSchedule: Date,
-                          healthKitTaskType: HKQuantityTypeIdentifier,
-                          selectedAsset: String) async {
+    func addHealthKitTask() async {
 
         guard let appDelegate = AppDelegateKey.defaultValue else {
             error =  AppError.couldntBeUnwrapped
@@ -73,6 +79,7 @@ class AddTaskViewModel: ObservableObject {
 
         healthKitTask.instructions = instructions
         healthKitTask.asset = selectedAsset
+        healthKitTask.card = selectedCard
 
         switch healthKitTaskType {
         case .vo2Max:
@@ -99,6 +106,8 @@ class AddTaskViewModel: ObservableObject {
 
         do {
             try await appDelegate.healthKitStore?.addTasksIfNotPresent([healthKitTask])
+            // Notify views they should refresh tasks if needed
+            NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.shouldRefreshView)))
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 NotificationCenter.default.post(.init(name: Notification.Name(rawValue: Constants.requestSync)))
                 Utility.requestHealthKitPermissions()

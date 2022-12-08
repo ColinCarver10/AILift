@@ -14,14 +14,6 @@ struct AddTaskView: View {
     @StateObject var viewModel = AddTaskViewModel()
     @State var storeManager = StoreManagerKey.defaultValue
 
-    @State var taskSchedule = Date()
-    @State var title: String = ""
-    @State var instructions: String = ""
-
-    @State var healthKitTaskType: HKQuantityTypeIdentifier = .appleSleepingWristTemperature
-
-    @State var selectedAsset: String = "figure.walk"
-
     // Create enum for healthkit task
 
     var availableHealthKitTaskTypes: [HKQuantityTypeIdentifier] = [.appleSleepingWristTemperature,
@@ -33,17 +25,7 @@ struct AddTaskView: View {
 
     @Binding var showAddTaskView: Bool
 
-    public enum TaskType: String, CaseIterable, Identifiable {
-        case task, healthKitTask
-        var id: String { self.rawValue }
-    }
     @State var selectedTaskType: TaskType = .task
-
-    public enum Day: String, CaseIterable, Identifiable {
-        case monday, tuesday, wednesday, thursday, friday, saturday, sunday
-        var id: String { self.rawValue }
-    }
-    @State var selectedDay: Day = .monday
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentationMode) private var presentationMode
@@ -62,22 +44,15 @@ struct AddTaskView: View {
                         Button("Done") {
                             if self.selectedTaskType == .task {
                                 Task {
-                                    await viewModel.addTask(title: title,
-                                                         instructions: instructions,
-                                                         taskSchedule: taskSchedule,
-                                                            selectedAsset: selectedAsset)
+                                    await viewModel.addTask()
                                     resetValues()
                                 }
                                 self.showAddTaskView.toggle()
                             } else if self.selectedTaskType == .healthKitTask {
                                 Task {
-                                    await viewModel.addHealthKitTask(title: title,
-                                                                  instructions: instructions,
-                                                                  taskSchedule: taskSchedule,
-                                                                  healthKitTaskType: healthKitTaskType,
-                                                                     selectedAsset: selectedAsset)
+                                    await viewModel.addHealthKitTask()
                                     resetValues()
-                                    healthKitTaskType = .appleSleepingWristTemperature
+                                    viewModel.healthKitTaskType = .appleSleepingWristTemperature
                                 }
                                 self.showAddTaskView.toggle()
                             }
@@ -101,20 +76,20 @@ private extension AddTaskView {
             } .pickerStyle(SegmentedPickerStyle())
 
             if selectedTaskType == .task {
-                TextField("Title", text: $title)
-                TextField("Description", text: $instructions)
+                TextField("Title", text: $viewModel.title)
+                TextField("Description", text: $viewModel.instructions)
 
-                Picker("Day", selection: $selectedDay) {
+                Picker("Day", selection: $viewModel.selectedDay) {
                     ForEach(Day.allCases) { day in
                                                 Text(day.rawValue.capitalized).tag(day)
                                             }
                 }
 
                 DatePicker("Schedule",
-                           selection: $taskSchedule,
+                           selection: $viewModel.taskSchedule,
                            displayedComponents: [.date])
 
-                Picker("Select asset", selection: $selectedAsset) {
+                Picker("Select asset", selection: $viewModel.selectedAsset) {
                     Text("Heart").tag("heart.fill")
                     Text("Bed").tag("bed.double.circle.fill")
                     Text("Eye").tag("eye.fill")
@@ -123,9 +98,15 @@ private extension AddTaskView {
                     Text("Lungs").tag("lungs.fill")
                 }
 
+                Picker("Card View", selection: $viewModel.selectedCard) {
+                    ForEach(CareKitCard.allCases) { item in
+                        Text(item.rawValue)
+                    }
+                }
+
             } else if selectedTaskType == .healthKitTask {
 
-                Picker("Type of HealthKit task", selection: $healthKitTaskType) {
+                Picker("Type of HealthKit task", selection: $viewModel.healthKitTaskType) {
                     Text("Sleep Temperature")
                         .tag(HKQuantityTypeIdentifier.appleSleepingWristTemperature)
                     Text("Exercise Time")
@@ -140,20 +121,20 @@ private extension AddTaskView {
                         .tag(HKQuantityTypeIdentifier.stepCount)
                 }
 
-                TextField("Title", text: $title)
-                TextField("Description", text: $instructions)
+                TextField("Title", text: $viewModel.title)
+                TextField("Description", text: $viewModel.instructions)
 
-                Picker("Day", selection: $selectedDay) {
+                Picker("Day", selection: $viewModel.selectedDay) {
                     ForEach(Day.allCases) { day in
                                                 Text(day.rawValue.capitalized).tag(day)
                                             }
                 }
 
                 DatePicker("Schedule",
-                           selection: $taskSchedule,
+                           selection: $viewModel.taskSchedule,
                            displayedComponents: [.date])
 
-                Picker("Select asset", selection: $selectedAsset) {
+                Picker("Select asset", selection: $viewModel.selectedAsset) {
                     Text("Heart").tag("heart.fill")
                     Text("Bed").tag("bed.double.circle.fill")
                     Text("Eye").tag("eye.fill")
@@ -180,11 +161,12 @@ private extension AddTaskView {
 
 private extension AddTaskView {
     func resetValues() {
-        title = ""
-        instructions = ""
-        selectedDay = .monday
+        viewModel.title = ""
+        viewModel.instructions = ""
+        viewModel.selectedDay = .monday
         selectedTaskType = .task
-        taskSchedule = Date()
-        selectedAsset = "figure.walk"
+        viewModel.taskSchedule = Date()
+        viewModel.selectedAsset = "figure.walk"
+        viewModel.selectedCard = .button
     }
 }
