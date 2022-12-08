@@ -161,13 +161,16 @@ class CareViewController: OCKDailyPageViewController {
                 if Calendar.current.isDate(date, inSameDayAs: Date()) {
                     // Add a non-CareKit view into the list
                     let tipTitle = "Benefits of exercising"
-                    let tipText = "Learn how activity can promote a healthy pregnancy."
-                    let tipView = TipView()
-                    tipView.headerView.titleLabel.text = tipTitle
-                    tipView.headerView.detailLabel.text = tipText
-                    tipView.imageView.image = UIImage(named: "exercise.jpg")
-                    tipView.customStyle = CustomStylerKey.defaultValue
-                    listViewController.appendView(tipView, animated: false)
+
+                    // xTODO: 5 - Need to use correct initializer instead of setting properties
+                    let customFeaturedView = CustomFeaturedContentView()
+                    // swiftlint:disable:next line_length
+                    customFeaturedView.url = URL(string: "https://www.uky.edu/hr/work-life-and-well-being/physical-activity")
+                    customFeaturedView.imageView.image = UIImage(named: "exercise.jpg")
+                    customFeaturedView.label.text = tipTitle
+                    customFeaturedView.label.textColor = .white
+                    customFeaturedView.customStyle = CustomStylerKey.defaultValue
+                    listViewController.appendView(customFeaturedView, animated: false)
                 }
             }
 
@@ -212,6 +215,20 @@ class CareViewController: OCKDailyPageViewController {
                 .careKitStyle(CustomStylerKey.defaultValue)
 
             return [view.formattedHostingController()]
+        case .custom:
+            /*
+             xTODO: Example of showing how to use your custom card. This
+             should be placed correctly for the final to receive credit.
+             This card currently only shows when numericProgress is selected,
+             you should add the card to the switch statement properly to
+             make it show on purpose when the card type is selected.
+            */
+            let viewModel = CustomCardViewModel(task: task,
+                                                eventQuery: .init(for: date),
+                                                storeManager: self.storeManager)
+            let customCard = CustomCardView(viewModel: viewModel)
+            return [customCard.formattedHostingController()]
+
         case .instruction:
             return [OCKInstructionsTaskViewController(task: task,
                                                      eventQuery: .init(for: date),
