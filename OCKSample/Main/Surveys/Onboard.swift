@@ -89,9 +89,8 @@ extension Onboard {
         let healthKitTypesToWrite: Set<HKSampleType> = [
             .quantityType(forIdentifier: .bodyMassIndex)!,
             .quantityType(forIdentifier: .activeEnergyBurned)!,
-            .quantityType(forIdentifier: .vo2Max)!,
             .quantityType(forIdentifier: .activeEnergyBurned)!,
-            .quantityType(forIdentifier: .heartRate)!,
+            .quantityType(forIdentifier: .heartRateVariabilitySDNN)!,
             .workoutType()
         ]
 
@@ -100,9 +99,8 @@ extension Onboard {
             .workoutType(),
             .quantityType(forIdentifier: .appleStandTime)!,
             .quantityType(forIdentifier: .appleExerciseTime)!,
-            .quantityType(forIdentifier: .vo2Max)!,
             .quantityType(forIdentifier: .activeEnergyBurned)!,
-            .quantityType(forIdentifier: .heartRate)!
+            .quantityType(forIdentifier: .heartRateVariabilitySDNN)!
         ]
 
         let healthKitPermissionType = ORKHealthKitPermissionType(

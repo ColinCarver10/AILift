@@ -49,6 +49,11 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
                 view.instructionsLabel.text = """
                     Please complete to begin using the application.
                     """
+            case "workout setup":
+                let workoutType = event.answer(kind: WorkoutSetup.workoutTypeIdentifier)
+                view.instructionsLabel.text = """
+                    Workout type: \(workoutType)
+                    """
             default:
                 view.instructionsLabel.text = "Unknown survey type."
 

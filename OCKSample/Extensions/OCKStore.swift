@@ -289,6 +289,21 @@ extension OCKStore {
         rangeOfMotionTask.card = .survey
         rangeOfMotionTask.survey = .rangeOfMotion
 
-        try await addTasksIfNotPresent([checkInTask, rangeOfMotionTask])
+        let workoutSetupSchedule = OCKSchedule.dailyAtTime(
+            hour: 8, minutes: 0,
+            start: Date(), end: nil,
+            text: nil
+        )
+
+        var workoutSetupTask = OCKTask(
+            id: WorkoutSetup.identifier(),
+            title: "Workout Setup",
+            carePlanUUID: carePlanUUID,
+            schedule: workoutSetupSchedule
+        )
+        workoutSetupTask.card = .survey
+        workoutSetupTask.survey = .workoutSetup
+
+        try await addTasksIfNotPresent([checkInTask, rangeOfMotionTask, workoutSetupTask])
     }
 }

@@ -141,7 +141,14 @@ enum TaskType: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
 }
 
-enum Day: String, CaseIterable, Identifiable {
-    case monday, tuesday, wednesday, thursday, friday, saturday, sunday
-    var id: String { self.rawValue }
+enum Day: Int, CaseIterable, Identifiable {
+    case sunday = 1
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
+
+    var id: Int { self.rawValue }
 }

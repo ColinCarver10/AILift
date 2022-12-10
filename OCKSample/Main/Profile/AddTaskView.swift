@@ -8,19 +8,17 @@
 
 import SwiftUI
 import HealthKit
+import os.log
 
 struct AddTaskView: View {
 
     @StateObject var viewModel = AddTaskViewModel()
     @State var storeManager = StoreManagerKey.defaultValue
 
-    // Create enum for healthkit task
-
     var availableHealthKitTaskTypes: [HKQuantityTypeIdentifier] = [.appleSleepingWristTemperature,
         .appleExerciseTime,
-        .heartRate,
+        .heartRateVariabilitySDNN,
         .activeEnergyBurned,
-        .vo2Max,
         .stepCount]
 
     @Binding var showAddTaskView: Bool
@@ -80,14 +78,18 @@ private extension AddTaskView {
                 TextField("Description", text: $viewModel.instructions)
 
                 Picker("Day", selection: $viewModel.selectedDay) {
-                    ForEach(Day.allCases) { day in
-                                                Text(day.rawValue.capitalized).tag(day)
-                                            }
+                    Text("Sunday").tag(1)
+                    Text("Monday").tag(2)
+                    Text("Tuesday").tag(3)
+                    Text("Wednesday").tag(4)
+                    Text("Thursday").tag(5)
+                    Text("Friday").tag(6)
+                    Text("Saturday").tag(7)
                 }
 
-                DatePicker("Schedule",
+                /*DatePicker("Schedule",
                            selection: $viewModel.taskSchedule,
-                           displayedComponents: [.date])
+                           displayedComponents: [.date])*/
 
                 Picker("Select asset", selection: $viewModel.selectedAsset) {
                     Text("Heart").tag("heart.fill")
@@ -125,14 +127,18 @@ private extension AddTaskView {
                 TextField("Description", text: $viewModel.instructions)
 
                 Picker("Day", selection: $viewModel.selectedDay) {
-                    ForEach(Day.allCases) { day in
-                                                Text(day.rawValue.capitalized).tag(day)
-                                            }
+                    Text("Sunday").tag(1)
+                    Text("Monday").tag(2)
+                    Text("Tuesday").tag(3)
+                    Text("Wednesday").tag(4)
+                    Text("Thursday").tag(5)
+                    Text("Friday").tag(6)
+                    Text("Saturday").tag(7)
                 }
-
+                /*
                 DatePicker("Schedule",
                            selection: $viewModel.taskSchedule,
-                           displayedComponents: [.date])
+                           displayedComponents: [.date])*/
 
                 Picker("Select asset", selection: $viewModel.selectedAsset) {
                     Text("Heart").tag("heart.fill")
@@ -163,7 +169,7 @@ private extension AddTaskView {
     func resetValues() {
         viewModel.title = ""
         viewModel.instructions = ""
-        viewModel.selectedDay = .monday
+        viewModel.selectedDay = 1
         selectedTaskType = .task
         viewModel.taskSchedule = Date()
         viewModel.selectedAsset = "figure.walk"
