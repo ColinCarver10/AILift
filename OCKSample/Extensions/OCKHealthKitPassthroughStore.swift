@@ -45,19 +45,20 @@ extension OCKHealthKitPassthroughStore {
     func populateSampleData(_ patientUUID: UUID? = nil) async throws {
 
         let schedule = OCKSchedule.dailyAtTime(
-            hour: 8, minutes: 0, start: Date(), end: nil, text: nil,
-            duration: .hours(12), targetValues: [OCKOutcomeValue(2000.0, units: "Steps")])
+            hour: 8, minutes: 0, start: Date(), end: nil, text: "Anytime throughout the day",
+            duration: .hours(12), targetValues: [OCKOutcomeValue(90, units: "Milliseconds")])
 
-        var steps = OCKHealthKitTask(
-            id: TaskID.steps,
-            title: "Steps",
-            carePlanUUID: patientUUID,
-            schedule: schedule,
-            healthKitLinkage: OCKHealthKitLinkage(
-                quantityIdentifier: .stepCount,
-                quantityType: .cumulative,
-                unit: .count()))
-        steps.asset = "figure.walk"
-        try await addTasksIfNotPresent([steps])
+        let recoveryNumber = OCKHealthKitLinkage(quantityIdentifier: .heartRateVariabilitySDNN,
+                                                 quantityType: .discrete,
+                                                 unit: .secondUnit(with: .milli))
+        var recovery = OCKHealthKitTask(id: TaskID.recovery,
+                                        title: "Recovery Quotient",
+                                        carePlanUUID: patientUUID,
+                                        schedule: schedule,
+                                        healthKitLinkage: recoveryNumber)
+        recovery.card = .numericProgress
+        recovery.asset = "bolt.heart"
+
+        try await addTasksIfNotPresent([recovery])
     }
 }

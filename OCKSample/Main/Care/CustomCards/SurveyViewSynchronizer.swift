@@ -32,12 +32,14 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
 
             switch surveyTaskType {
             case "check in":
-                let pain = event.answer(kind: CheckIn.painItemIdentifier)
+                let pain = event.answer(kind: CheckIn.recoveryItemIdentifier)
                 let sleep = event.answer(kind: CheckIn.sleepItemIdentifier)
+                let stress = event.answer(kind: CheckIn.stressItemIdentifier)
 
                 view.instructionsLabel.text = """
-                    Pain: \(Int(pain))
-                    Sleep: \(Int(sleep)) hours
+                    Recovery: \(Int(pain))
+                    Sleep: \(Int(sleep))
+                    Stress: \(Int(stress))
                     """
             case "range of motion":
                 let range = event.answer(kind: RangeOfMotion.rangeIdentifier)
@@ -50,9 +52,19 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
                     Please complete to begin using the application.
                     """
             case "workout setup":
-                let workoutType = event.answer(kind: WorkoutSetup.workoutTypeIdentifier)
+                let workoutType = event.outcome?.answerString(kind: WorkoutSetup.workoutTypeIdentifier).first
+                let benchMax = event.answer(kind: WorkoutSetup.benchMaxIdentifier)
+                let squatMax = event.answer(kind: WorkoutSetup.squatMaxIdentifier)
+                let deadliftMax = event.answer(kind: WorkoutSetup.deadliftMaxIdentifier)
+                let snatchMax = event.answer(kind: WorkoutSetup.snatchMaxIdentifier)
+                let cleanMax = event.answer(kind: WorkoutSetup.cleanMaxIdentifier)
                 view.instructionsLabel.text = """
-                    Workout type: \(workoutType)
+                    Workout type: \(workoutType ?? "Body Building")
+                    Bench Max: \(benchMax)
+                    Squat Max: \(squatMax)
+                    Deadlift Max: \(deadliftMax)
+                    Snatch Max: \(snatchMax)
+                    Clean Max: \(cleanMax)
                     """
             default:
                 view.instructionsLabel.text = "Unknown survey type."
