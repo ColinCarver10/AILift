@@ -17,6 +17,7 @@ import ParseSwift
 
 class ProfileViewModel: ObservableObject {
     // MARK: Public read, private write properties
+    @Published var workoutType: WorkoutType = .bodybuilding
     @Published var firstName = ""
     @Published var lastName = ""
     @Published var birthday = Date()
@@ -75,6 +76,11 @@ class ProfileViewModel: ObservableObject {
 
     private var patient: OCKPatient? {
          willSet {
+             if let currentWorkoutType = newValue?.workoutType {
+                 workoutType = currentWorkoutType
+             } else {
+                 workoutType = .bodybuilding
+             }
              if let currentFirstName = newValue?.name.givenName {
                  firstName = currentFirstName
              } else {
@@ -320,6 +326,11 @@ extension ProfileViewModel {
         if var patientToUpdate = patient {
             // If there is a currentPatient that was fetched, check to see if any of the fields changed
             var patientHasBeenUpdated = false
+
+            if patient?.workoutType != workoutType {
+                patientHasBeenUpdated = true
+                patientToUpdate.workoutType = workoutType
+            }
 
             if patient?.name.givenName != firstName {
                 patientHasBeenUpdated = true

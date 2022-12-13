@@ -11,38 +11,36 @@ import CareKit
 import CareKitStore
 import SwiftUI
 import ParseCareKit
+import os.log
 
 class DeleteTaskViewModel: ObservableObject {
 
     @Published var error: AppError?
-    @State var availableTasks: [OCKTask]? = []
+    @Published var taskIDs: [String] = []
+    var tasks: [OCKAnyTask] = []
+    @Published var isLoading: Bool = false
+    var storeManager = StoreManagerKey.defaultValue
 
-    func retrieveTasks() async {
+    init() {
+        self.isLoading = true
+        fetchTasks(on: Date())
 
-        guard let appDelegate = AppDelegateKey.defaultValue else {
-            error =  AppError.couldntBeUnwrapped
-            return
-        }
-
-        do {
-            availableTasks = try await appDelegate.store?.fetchTasks(query: OCKTaskQuery(for: Date()))
-            guard let tasks = availableTasks else {
-                return
-            }
-
-            for task in tasks {
-
-                print("This is a task \(task)")
-            }
-        } catch {
-            // swiftlint:disable:next line_length superfluous_disable_command
-            self.error = AppError.errorString("Couldn't add task: \(error.localizedDescription)")
-        }
     }
 
-    func runRetrieveTasks() {
-        Task {
-            await retrieveTasks()
+    func fetchTasks(on date: Date) {
+        var query = OCKTaskQuery(for: date)
+        query.excludesTasksWithNoEvents = true
+        storeManager.store.fetchAnyTasks(query: query, callbackQueue: .main) { result in
+            do {
+                try self.tasks.append(contentsOf: result.get())
+            } catch {
+                Logger.feed.error("\(error.localizedDescription, privacy: .public)")
+            }
         }
+
+        for task in tasks {
+            taskIDs.append(task.id)
+        }
+
     }
 }

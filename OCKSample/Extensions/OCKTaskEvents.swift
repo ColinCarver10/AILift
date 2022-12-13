@@ -64,7 +64,7 @@ extension OCKTaskEvents {
 
     /// The first event first outcome value as a **Int**.
     /// - note: Returns **0** if the first outcome is **nil**.
-    var firstEventOutcomeValueInt: Int {
+    var firstEventOutcomeValueInt: Int? {
         firstEventOutcomeFirstValue?.integerValue ?? 0
     }
 

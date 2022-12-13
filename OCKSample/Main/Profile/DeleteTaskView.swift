@@ -15,12 +15,27 @@ struct DeleteTaskView: View {
 
     @StateObject var viewModel = DeleteTaskViewModel()
     @Binding var showDeleteTaskView: Bool
+    @State private var selection = Set<String>()
 
     var body: some View {
         if showDeleteTaskView {
             NavigationView {
-                Form {
-                    general
+                VStack {
+                    if viewModel.isLoading {
+                        if viewModel.taskIDs.isEmpty {
+                            Text("No data here.")
+                        } else {
+                            List($viewModel.taskIDs, id: \.self, selection: $selection) { _ in
+                                Text("1")
+                            }
+                            .navigationTitle("List Selection")
+                            .toolbar {
+                                EditButton()
+                            }
+                        }
+                    } else {
+                        Text("Loading today's tasks...")
+                    }
                 }
                 .navigationTitle("Delete Task")
                 .toolbar {
@@ -33,14 +48,5 @@ struct DeleteTaskView: View {
             }
         }
     }
-}
 
-private extension DeleteTaskView {
-    var general: some View {
-        Section {
-            Button("Run task finder") {
-                viewModel.runRetrieveTasks()
-            }
-        }
-    }
 }

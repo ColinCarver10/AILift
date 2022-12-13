@@ -59,6 +59,11 @@ struct ProfileView: View {
                                     .tag(OCKBiologicalSex.other(viewModel.sexOtherField))
                             }
                             TextField("Allergies", text: $viewModel.allergies[0])
+                            Picker(selection: $viewModel.workoutType, label: Text("Workout Type")) {
+                                Text("Body Building").tag(WorkoutType.bodybuilding)
+                                Text("Power Lifting").tag(WorkoutType.powerlifting)
+                                Text("Weight Lifting").tag(WorkoutType.weightlifting)
+                            }
                         }
                         Section(header: Text("Contact")) {
                             TextField("Street", text: $viewModel.street)
@@ -111,17 +116,6 @@ struct ProfileView: View {
                     viewModel.isShowingSaveAlert = false
                 }))
             }
-            /*.onReceive(viewModel.$patient, perform: { patient in
-                if let currentFirstName = patient?.name.givenName {
-                    firstName = currentFirstName
-                }
-                if let currentLastName = patient?.name.familyName {
-                    lastName = currentLastName
-                }
-                if let currentBirthday = patient?.birthday {
-                    birthday = currentBirthday
-                }
-            })*/
         } .overlay(DeleteTaskView(showDeleteTaskView: self.$viewModel.showDeleteTaskView))
             .overlay(AddTaskView(showAddTaskView: self.$viewModel.showAddTaskView))
     }

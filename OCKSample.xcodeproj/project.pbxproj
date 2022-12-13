@@ -44,7 +44,12 @@
 		664799BA294264990061D188 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664799B9294264990061D188 /* InsightsView.swift */; };
 		664799BC294264B40061D188 /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664799BB294264B40061D188 /* InsightsViewModel.swift */; };
 		664799BD294264BC0061D188 /* OCKEventAggregator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664799B7294264530061D188 /* OCKEventAggregator.swift */; };
+		664E96842946BC10008C1081 /* OCKPatient+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664E96832946BC10008C1081 /* OCKPatient+Custom.swift */; };
+		664E96852946BC1C008C1081 /* OCKPatient+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 664E96832946BC10008C1081 /* OCKPatient+Custom.swift */; };
+		664E96862946D94E008C1081 /* Calendar+Dates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 918FDEBB271B4E4A0045A0EF /* Calendar+Dates.swift */; };
 		667ADE5D2936AD7C0061FBFF /* CustomFeaturedContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667ADE5C2936AD7C0061FBFF /* CustomFeaturedContentView.swift */; };
+		668AFF0C294435F9000529E4 /* WorkoutSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668AFF0B294435F9000529E4 /* WorkoutSetup.swift */; };
+		668AFF0E294439CD000529E4 /* WorkoutSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668AFF0B294435F9000529E4 /* WorkoutSetup.swift */; };
 		66966DCA2913272800A4608F /* AddTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DC92913272800A4608F /* AddTaskView.swift */; };
 		66966DCC2913273A00A4608F /* AddTaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCB2913273900A4608F /* AddTaskViewModel.swift */; };
 		66966DCE2913279D00A4608F /* DeleteTaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66966DCD2913279D00A4608F /* DeleteTaskView.swift */; };
@@ -248,7 +253,9 @@
 		664799B7294264530061D188 /* OCKEventAggregator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OCKEventAggregator.swift; sourceTree = "<group>"; };
 		664799B9294264990061D188 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
 		664799BB294264B40061D188 /* InsightsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
+		664E96832946BC10008C1081 /* OCKPatient+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OCKPatient+Custom.swift"; sourceTree = "<group>"; };
 		667ADE5C2936AD7C0061FBFF /* CustomFeaturedContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomFeaturedContentView.swift; sourceTree = "<group>"; };
+		668AFF0B294435F9000529E4 /* WorkoutSetup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutSetup.swift; sourceTree = "<group>"; };
 		66966DC92913272800A4608F /* AddTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskView.swift; sourceTree = "<group>"; };
 		66966DCB2913273900A4608F /* AddTaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewModel.swift; sourceTree = "<group>"; };
 		66966DCD2913279D00A4608F /* DeleteTaskView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteTaskView.swift; sourceTree = "<group>"; };
@@ -408,6 +415,7 @@
 				6603D564293405CB00800580 /* CheckIn.swift */,
 				6603D5662934060800800580 /* Onboard.swift */,
 				6603D5682934062400800580 /* RangeOfMotion.swift */,
+				668AFF0B294435F9000529E4 /* WorkoutSetup.swift */,
 			);
 			path = Surveys;
 			sourceTree = "<group>";
@@ -637,6 +645,7 @@
 				669A0CD4293FEA9A009FD520 /* OCKTaskController.swift */,
 				669A0CD7293FEAB8009FD520 /* OCKTaskEvents.swift */,
 				664799B7294264530061D188 /* OCKEventAggregator.swift */,
+				664E96832946BC10008C1081 /* OCKPatient+Custom.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -957,9 +966,11 @@
 				91693818271B5E1600A634ED /* Constants.swift in Sources */,
 				7075152028DE1BB400A57A0C /* LoginView.swift in Sources */,
 				70F921B227CAC16E00368CEC /* RemoteSessionDelegate.swift in Sources */,
+				664E96852946BC1C008C1081 /* OCKPatient+Custom.swift in Sources */,
 				70221F2F28D7CDE400971195 /* AppDelegate+ParseRemoteDelegate.swift in Sources */,
 				6606B5D628F60D7300916A73 /* Styler.swift in Sources */,
 				6603D56F29340B2200800580 /* OCKTask+Custom.swift in Sources */,
+				668AFF0E294439CD000529E4 /* WorkoutSetup.swift in Sources */,
 				7083A857279CA40F00B3832E /* PCKUtility.swift in Sources */,
 				91AD923924A4C42D00925D4D /* OCKWatchSampleApp.swift in Sources */,
 				669A0CD9293FEAB8009FD520 /* OCKTaskEvents.swift in Sources */,
@@ -981,6 +992,7 @@
 				918FDEB9271B493A0045A0EF /* Installation.swift in Sources */,
 				70F03A9D27860A5600E5AFB4 /* OCKSynchronizedStoreManager+Publishers.swift in Sources */,
 				6696D76428FDFDF700C7E7A4 /* DimensionStyle.swift in Sources */,
+				664E96862946D94E008C1081 /* Calendar+Dates.swift in Sources */,
 				70F03AA527860B2500E5AFB4 /* OCKOutcomeValue+Identifiable.swift in Sources */,
 				664799BD294264BC0061D188 /* OCKEventAggregator.swift in Sources */,
 				91AD923F24A4C42D00925D4D /* NotificationController.swift in Sources */,
@@ -1010,6 +1022,7 @@
 				6626BCA7291C1F55000ECFE1 /* ImagePicker.swift in Sources */,
 				70F921AC27CABE3000368CEC /* SessionDelegate.swift in Sources */,
 				70F0EFEA28C2EE6C0005B5A2 /* AppDelegateKey.swift in Sources */,
+				664E96842946BC10008C1081 /* OCKPatient+Custom.swift in Sources */,
 				6603D5672934060800800580 /* Onboard.swift in Sources */,
 				669A0CD2293FEA6E009FD520 /* OCKAnyOutcome.swift in Sources */,
 				669A0CD5293FEA9A009FD520 /* OCKTaskController.swift in Sources */,
@@ -1050,6 +1063,7 @@
 				918FDEB7271B41FF0045A0EF /* Logger.swift in Sources */,
 				70F03A9F27860A8800E5AFB4 /* OCKOutcomeValue+Identifiable.swift in Sources */,
 				6626BCA5291C1D6D000ECFE1 /* OCKBiologicalSex+Hashable.swift in Sources */,
+				668AFF0C294435F9000529E4 /* WorkoutSetup.swift in Sources */,
 				66966DCC2913273A00A4608F /* AddTaskViewModel.swift in Sources */,
 				6626BCA1291B50A3000ECFE1 /* MyContactView.swift in Sources */,
 				70221F2A28D7BE0600971195 /* AppDelegate+ParseRemoteDelegate.swift in Sources */,

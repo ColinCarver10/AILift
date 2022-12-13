@@ -20,12 +20,16 @@ struct CheckIn: Surveyable {
         "\(Self.identifier()).form"
     }
 
-    static var painItemIdentifier: String {
-        "\(Self.identifier()).form.pain"
+    static var recoveryItemIdentifier: String {
+        "\(Self.identifier()).form.recovery"
     }
 
     static var sleepItemIdentifier: String {
         "\(Self.identifier()).form.sleep"
+    }
+
+    static var stressItemIdentifier: String {
+        "\(Self.identifier()).form.stress"
     }
 }
 
@@ -33,25 +37,25 @@ struct CheckIn: Surveyable {
 extension CheckIn {
     func createSurvey() -> ORKTask {
 
-        let painAnswerFormat = ORKAnswerFormat.scale(
+        let recoveryAnswerFormat = ORKAnswerFormat.scale(
             withMaximumValue: 10,
             minimumValue: 0,
             defaultValue: 0,
             step: 1,
             vertical: false,
-            maximumValueDescription: "Very painful",
-            minimumValueDescription: "No pain"
+            maximumValueDescription: "Very well recovered",
+            minimumValueDescription: "Poorly recovered"
         )
 
-        let painItem = ORKFormItem(
-            identifier: Self.painItemIdentifier,
-            text: "How would you rate your pain?",
-            answerFormat: painAnswerFormat
+        let recoveryItem = ORKFormItem(
+            identifier: Self.recoveryItemIdentifier,
+            text: "How would you rate your recovery since your last lifting session?",
+            answerFormat: recoveryAnswerFormat
         )
-        painItem.isOptional = false
+        recoveryItem.isOptional = false
 
         let sleepAnswerFormat = ORKAnswerFormat.scale(
-            withMaximumValue: 12,
+            withMaximumValue: 10,
             minimumValue: 0,
             defaultValue: 0,
             step: 1,
@@ -62,17 +66,34 @@ extension CheckIn {
 
         let sleepItem = ORKFormItem(
             identifier: Self.sleepItemIdentifier,
-            text: "How many hours of sleep did you get last night?",
+            text: "How was the quality of your sleep last night?",
             answerFormat: sleepAnswerFormat
         )
         sleepItem.isOptional = false
+
+        let stressAnswerFormat = ORKAnswerFormat.scale(
+            withMaximumValue: 10,
+            minimumValue: 0,
+            defaultValue: 0,
+            step: 1,
+            vertical: false,
+            maximumValueDescription: "Very stressed",
+            minimumValueDescription: "Not stressed at all"
+        )
+
+        let stressItem = ORKFormItem(
+            identifier: Self.stressItemIdentifier,
+            text: "How would you rate your stress levels?",
+            answerFormat: stressAnswerFormat
+        )
+        stressItem.isOptional = false
 
         let formStep = ORKFormStep(
             identifier: Self.formIdentifier,
             title: "Check In",
             text: "Please answer the following questions."
         )
-        formStep.formItems = [painItem, sleepItem]
+        formStep.formItems = [recoveryItem, sleepItem, stressItem]
         formStep.isOptional = false
 
         let surveyTask = ORKOrderedTask(
@@ -92,25 +113,32 @@ extension CheckIn {
             let scaleResults = response
                 .results?.compactMap({ $0 as? ORKScaleQuestionResult }),
 
-            let painAnswer = scaleResults
-                .first(where: { $0.identifier == Self.painItemIdentifier })?
+            let recoveryAnswer = scaleResults
+                .first(where: { $0.identifier == Self.recoveryItemIdentifier })?
                 .scaleAnswer,
 
             let sleepAnswer = scaleResults
                 .first(where: { $0.identifier == Self.sleepItemIdentifier })?
+                .scaleAnswer,
+
+            let stressAnswer = scaleResults
+                .first(where: {$0.identifier == Self.stressItemIdentifier })?
                 .scaleAnswer
         else {
             assertionFailure("Failed to extract answers from check in survey!")
             return nil
         }
 
-        var painValue = OCKOutcomeValue(Double(truncating: painAnswer))
-        painValue.kind = Self.painItemIdentifier
+        var recoveryValue = OCKOutcomeValue(Double(truncating: recoveryAnswer))
+        recoveryValue.kind = Self.recoveryItemIdentifier
 
         var sleepValue = OCKOutcomeValue(Double(truncating: sleepAnswer))
         sleepValue.kind = Self.sleepItemIdentifier
 
-        return [painValue, sleepValue]
+        var stressValue = OCKOutcomeValue(Double(truncating: stressAnswer))
+        stressValue.kind = Self.stressItemIdentifier
+
+        return [recoveryValue, sleepValue, stressValue]
     }
 }
 #endif

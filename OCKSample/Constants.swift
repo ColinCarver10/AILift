@@ -79,8 +79,10 @@ enum Constants {
     static let userLoggedIn = "userLoggedIn"
     static let storeInitialized = "storeInitialized"
     static let userTypeKey = "userType"
+    static let workoutTypeKey = "workoutType"
     static let card = "card"
     static let survey = "survey"
+    static var workoutSetupCompleted = false
 }
 
 enum MainViewPath {
@@ -106,6 +108,9 @@ enum CarePlanID: String, CaseIterable, Identifiable {
     var id: Self { self }
     case health // Add custom id's for your Care Plans, these are examples
     case checkIn
+    case armDay
+    case legDay
+    case restDay
 }
 
 enum TaskID {
@@ -115,9 +120,14 @@ enum TaskID {
     static let kegels = "kegels"
     static let steps = "steps"
     static let repetition = "repetition"
+    static let warmup = "warmup"
+    static let recovery = "recovery"
+    static let rest = "rest"
+    static let energyBurned = "energyburned"
+    static let foamRoll = "foamroll"
 
     static var ordered: [String] {
-        [Self.steps, Self.doxylamine, Self.kegels, Self.stretch, Self.nausea]
+        [Self.recovery, Self.warmup, Self.repetition]
     }
 }
 
@@ -132,6 +142,16 @@ enum UserType: String, Codable {
     }
 }
 
+enum WorkoutType: String, Codable {
+    case bodybuilding, powerlifting, weightlifting
+
+    func allTypesAsArray() -> [String] {
+        return [WorkoutType.bodybuilding.rawValue,
+                WorkoutType.powerlifting.rawValue,
+                WorkoutType.weightlifting.rawValue]
+    }
+}
+
 enum InstallationChannel: String {
     case global
 }
@@ -141,7 +161,79 @@ enum TaskType: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
 }
 
-enum Day: String, CaseIterable, Identifiable {
-    case monday, tuesday, wednesday, thursday, friday, saturday, sunday
-    var id: String { self.rawValue }
+
+enum Day: Int, CaseIterable, Identifiable {
+    case sunday = 1
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
+
+    var id: Int { self.rawValue }
+}
+
+enum DaySchedules {
+    private static let calendar = Calendar(identifier: .gregorian)
+
+    private static let sunday = DateComponents(weekday: Day.sunday.id)
+    private static let monday = DateComponents(weekday: Day.monday.id)
+    private static let tuesday = DateComponents(weekday: Day.tuesday.id)
+    private static let wednesday = DateComponents(weekday: Day.wednesday.id)
+    private static let thursday = DateComponents(weekday: Day.thursday.id)
+    private static let friday = DateComponents(weekday: Day.friday.id)
+    private static let saturday = DateComponents(weekday: Day.saturday.id)
+
+    private static let nextSunday = calendar.nextDate(after: Date().dayBefore,
+                                    matching: sunday,
+                                          matchingPolicy: .nextTimePreservingSmallerComponents)
+    private static let nextMonday = calendar.nextDate(after: Date().dayBefore,
+                                    matching: monday,
+                                          matchingPolicy: .nextTimePreservingSmallerComponents)
+    private static let nextTuesday = calendar.nextDate(after: Date().dayBefore,
+                                    matching: tuesday,
+                                          matchingPolicy: .nextTimePreservingSmallerComponents)
+    private static let nextWednesday = calendar.nextDate(after: Date().dayBefore,
+                                    matching: wednesday,
+                                          matchingPolicy: .nextTimePreservingSmallerComponents)
+    private static let nextThursday = calendar.nextDate(after: Date().dayBefore,
+                                    matching: thursday,
+                                          matchingPolicy: .nextTimePreservingSmallerComponents)
+    private static let nextFriday = calendar.nextDate(after: Date().dayBefore,
+                                    matching: friday,
+                                          matchingPolicy: .nextTimePreservingSmallerComponents)
+    private static let nextSaturday = calendar.nextDate(after: Date().dayBefore,
+                                    matching: saturday,
+                                          matchingPolicy: .nextTimePreservingSmallerComponents)
+
+    private static let weeklyAtSunday = OCKScheduleElement(start: nextSunday ?? Date(),
+                                         end: nil,
+                                         interval: DateComponents(weekOfYear: 1))
+    private static let weeklyAtMonday = OCKScheduleElement(start: nextMonday ?? Date(),
+                                         end: nil,
+                                         interval: DateComponents(weekOfYear: 1))
+    private static let weeklyAtTuesday = OCKScheduleElement(start: nextTuesday ?? Date(),
+                                         end: nil,
+                                         interval: DateComponents(weekOfYear: 1))
+    private static let weeklyAtWednesday = OCKScheduleElement(start: nextWednesday ?? Date(),
+                                         end: nil,
+                                         interval: DateComponents(weekOfYear: 1))
+    private static let weeklyAtThursday = OCKScheduleElement(start: nextThursday ?? Date(),
+                                         end: nil,
+                                         interval: DateComponents(weekOfYear: 1))
+    private static let weeklyAtFriday = OCKScheduleElement(start: nextFriday ?? Date(),
+                                         end: nil,
+                                         interval: DateComponents(weekOfYear: 1))
+    private static let weeklyAtSaturday = OCKScheduleElement(start: nextSaturday ?? Date(),
+                                         end: nil,
+                                         interval: DateComponents(weekOfYear: 1))
+
+    static let sundaySchedule = OCKSchedule(composing: [weeklyAtSunday])
+    static let mondaySchedule = OCKSchedule(composing: [weeklyAtMonday])
+    static let tuesdaySchedule = OCKSchedule(composing: [weeklyAtTuesday])
+    static let wednesdaySchedule = OCKSchedule(composing: [weeklyAtWednesday])
+    static let thursdaySchedule = OCKSchedule(composing: [weeklyAtThursday])
+    static let fridaySchedule = OCKSchedule(composing: [weeklyAtFriday])
+    static let saturdaySchedule = OCKSchedule(composing: [weeklyAtSaturday])
 }

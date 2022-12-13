@@ -16,7 +16,8 @@ class CustomCardViewModel: CardViewModel {
      */
 
     /// Example value
-    @Published var value: Double = 0
+    @Published var RPE: Int = 5
+    @Published var weight: Int = 0
 
     let amountFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -26,14 +27,14 @@ class CustomCardViewModel: CardViewModel {
 
     /// This value can be used directly in Text() views.
     var valueForButton: String {
-        guard let doubleValue = taskEvents.firstEventOutcomeValueDouble else {
-            return "\(Int(value))"
+        guard let intValue = taskEvents.firstEventOutcomeValueInt else {
+            return "\(Int(RPE))"
         }
-        return "\(Int(doubleValue))"
+        return "\(Int(intValue))"
     }
 
     /// Action performed when button is tapped
-    private(set) var action: (Double) async -> Void = { _ in }
+    private(set) var action: (Int) async -> Void = { _ in }
 
     /// Create an instance for the default content. The first event that matches the
     /// provided query will be fetched from the the store and
@@ -81,9 +82,10 @@ class CustomCardViewModel: CardViewModel {
     /// Automatically updates the value after it's saved to the database.
     @MainActor
     func checkIfValueShouldUpdate(_ updatedEvents: OCKTaskEvents) {
-        if let changedValue = updatedEvents.firstEventOutcomeValueDouble,
-            self.value != changedValue {
-            self.value = changedValue
+
+        if let changedValue = updatedEvents.firstEventOutcomeValueInt,
+            self.RPE != changedValue {
+            self.RPE = changedValue
         }
     }
 }
