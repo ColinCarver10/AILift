@@ -8,6 +8,7 @@
 import UIKit
 import CareKit
 import CareKitUI
+import SwiftUI
 
 /// A simple subclass to take control of what CareKit already gives us.
 class CustomFeaturedContentView: OCKFeaturedContentView {

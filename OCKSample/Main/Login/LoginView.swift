@@ -34,18 +34,19 @@ struct LoginView: View {
     var body: some View {
         VStack {
             // Change the title to the name of your application
-            Text("AI Lift")
+            /*Text("AI Lift")
                 .font(.largeTitle)
                 .foregroundColor(.white)
-                .padding()
+                .padding()*/
+            Spacer().frame(height: 25)
             // Change this image to something that represents your application
             Image("applogo")
                 .resizable()
-                .frame(width: 150, height: 150, alignment: .center)
-                .clipShape(Circle())
-                .overlay(Circle().stroke(Color(.white), lineWidth: 4))
-                .shadow(radius: 10)
-                .padding()
+                .frame(width: 350, height: 250, alignment: .center)
+                // .clipShape(Circle())
+                // .overlay(Circle().stroke(Color(.white), lineWidth: 4))
+                .shadow(radius: 20)
+                // .padding()
 
             /*
              Example of how to do the picker here:
@@ -124,18 +125,18 @@ struct LoginView: View {
                 case 1:
                     Text("Sign Up")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                         .padding()
                         .frame(width: 300)
                 default:
                     Text("Login")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                         .padding()
                         .frame(width: 300)
                 }
             })
-            .background(Color(.green))
+            .background(Color(.white))
             .cornerRadius(15)
 
             Button(action: {
@@ -147,14 +148,14 @@ struct LoginView: View {
                 case 0:
                     Text("Login Anonymously")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                         .padding()
                         .frame(width: 300)
                 default:
                     EmptyView()
                 }
             })
-            .background(Color(.lightGray))
+            .background(Color(.white))
             .cornerRadius(15)
 
             // If an error occurs show it on the screen
@@ -164,9 +165,10 @@ struct LoginView: View {
             }
             Spacer()
         }
+        // .background(Color(tintColor))
         .background(LinearGradient(gradient: Gradient(colors: [Color(tintColorFlip),
                                                                Color(tintColor)]),
-                                   startPoint: .top,
+                                   startPoint: .bottomLeading,
                                    endPoint: .bottom))
     }
 }

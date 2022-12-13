@@ -12,6 +12,7 @@ import CareKitStore
 import SwiftUI
 import ParseCareKit
 import HealthKit
+import OSLog
 
 class AddTaskViewModel: ObservableObject {
 
@@ -25,7 +26,7 @@ class AddTaskViewModel: ObservableObject {
 
     @Published var selectedAsset: String = "figure.walk"
 
-    @Published var selectedDay: Day = .monday
+    @Published var selectedDay: Int = 1
 
     // MARK: Intents
 
@@ -35,10 +36,20 @@ class AddTaskViewModel: ObservableObject {
             return
         }
 
-        let scheduleElement = OCKScheduleElement(start: taskSchedule,
-                                                 end: nil,
-                                                 interval: DateComponents(day: 1))
-        let schedule = OCKSchedule(composing: [scheduleElement])
+        let calendar = Calendar(identifier: .gregorian)
+        let dayComponent = DateComponents(weekday: selectedDay)
+
+        guard let nextDay = calendar.nextDate(after: Date().dayBefore,
+                                        matching: dayComponent,
+                                              matchingPolicy: .nextTimePreservingSmallerComponents) else {
+            Logger.task.error("Couldn't unwrap time.")
+            return
+        }
+
+        let weeklyAtDay = OCKScheduleElement(start: nextDay,
+                                             end: nil,
+                                             interval: DateComponents(weekOfYear: 1))
+        let schedule = OCKSchedule(composing: [weeklyAtDay])
 
         var task = OCKTask(id: title,
                                       title: title,
@@ -65,8 +76,20 @@ class AddTaskViewModel: ObservableObject {
             return
         }
 
-        let schedule = OCKSchedule.dailyAtTime(
-            hour: 8, minutes: 0, start: taskSchedule, end: nil, text: nil)
+        let calendar = Calendar(identifier: .gregorian)
+        let dayComponent = DateComponents(weekday: selectedDay)
+
+        guard let nextDay = calendar.nextDate(after: Date().dayBefore,
+                                        matching: dayComponent,
+                                              matchingPolicy: .nextTimePreservingSmallerComponents) else {
+            Logger.task.error("Couldn't unwrap time.")
+            return
+        }
+
+        let weeklyAtDay = OCKScheduleElement(start: nextDay,
+                                             end: nil,
+                                             interval: DateComponents(weekOfYear: 1))
+        let schedule = OCKSchedule(composing: [weeklyAtDay])
 
         var healthKitTask = OCKHealthKitTask(id: title,
                                     title: title,
@@ -82,18 +105,15 @@ class AddTaskViewModel: ObservableObject {
         healthKitTask.card = selectedCard
 
         switch healthKitTaskType {
-        case .vo2Max:
-            healthKitTask.healthKitLinkage.quantityType = .discrete
-            healthKitTask.healthKitLinkage.unit = HKUnit(from: "ml/kg*min")
         case .stepCount:
             healthKitTask.healthKitLinkage.quantityType = .cumulative
             healthKitTask.healthKitLinkage.unit = .count()
         case .activeEnergyBurned:
             healthKitTask.healthKitLinkage.quantityType = .cumulative
             healthKitTask.healthKitLinkage.unit = .kilocalorie()
-        case .heartRate:
+        case .heartRateVariabilitySDNN:
             healthKitTask.healthKitLinkage.quantityType = .discrete
-            healthKitTask.healthKitLinkage.unit = HKUnit(from: "count/min")
+            healthKitTask.healthKitLinkage.unit = .secondUnit(with: .milli)
         case .appleExerciseTime:
             healthKitTask.healthKitLinkage.quantityType = .cumulative
             healthKitTask.healthKitLinkage.unit = .minute()
