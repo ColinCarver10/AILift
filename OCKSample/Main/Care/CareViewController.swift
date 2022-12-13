@@ -160,15 +160,17 @@ class CareViewController: OCKDailyPageViewController {
             if isCurrentDay {
                 if Calendar.current.isDate(date, inSameDayAs: Date()) {
                     // Add a non-CareKit view into the list
-                    let tipTitle = "Benefits of exercising"
+                    let tipTitle = "Technique Playlist"
 
                     // xTODO: 5 - Need to use correct initializer instead of setting properties
                     let customFeaturedView = CustomFeaturedContentView()
                     // swiftlint:disable:next line_length
-                    customFeaturedView.url = URL(string: "https://www.uky.edu/hr/work-life-and-well-being/physical-activity")
-                    customFeaturedView.imageView.image = UIImage(named: "exercise.jpg")
+                    customFeaturedView.url = URL(string: "https://www.youtube.com/playlist?list=PLp4G6oBUcv8yGQifkb4p_ZOoACPnYslx9")
+
+                    customFeaturedView.imageView.image = UIImage(named: "linkThumbnail")
                     customFeaturedView.label.text = tipTitle
                     customFeaturedView.label.textColor = .white
+                    customFeaturedView.label.shadowColor = .black
                     customFeaturedView.customStyle = CustomStylerKey.defaultValue
                     listViewController.appendView(customFeaturedView, animated: false)
                 }
@@ -281,6 +283,13 @@ class CareViewController: OCKDailyPageViewController {
             guard let surveyTask = task as? OCKTask else {
                 Logger.feed.error("Can only use a survey for an \"OCKTask\", not \(task.id)")
                 return nil
+            }
+
+            // If Workout Setup has been completed, don't show it.
+            if surveyTask.id == WorkoutSetup.identifier() {
+                if Constants.workoutSetupCompleted {
+                    return []
+                }
             }
 
             let surveyCard = OCKSurveyTaskViewController(taskID: surveyTask.survey.type().identifier(),

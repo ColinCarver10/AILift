@@ -13,7 +13,7 @@ import UIKit
 import os.log
 
 final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
-
+    // swiftlint:disable:next cyclomatic_complexity
     override func updateView(
         _ view: OCKInstructionsTaskView,
         context: OCKSynchronizationContext<OCKTaskEvents>) {
@@ -58,13 +58,50 @@ final class SurveyViewSynchronizer: OCKSurveyTaskViewSynchronizer {
                 let deadliftMax = event.answer(kind: WorkoutSetup.deadliftMaxIdentifier)
                 let snatchMax = event.answer(kind: WorkoutSetup.snatchMaxIdentifier)
                 let cleanMax = event.answer(kind: WorkoutSetup.cleanMaxIdentifier)
-                view.instructionsLabel.text = """
+
+                // Automatically update the workoutType for the user.
+                Task {
+                    guard let uuid = try? Utility.getRemoteClockUUID() else {
+                        Logger.profile.error("Could not get remote uuid for this user.")
+                        return
+                    }
+
+                    var queryForCurrentPatient = OCKPatientQuery(for: Date())
+                    // This makes the query for the current version of Patient
+                    queryForCurrentPatient.ids = [uuid.uuidString] // Search for the current logged in user
+
+                    // Fetch Current Patient
+                    guard let appDelegate = AppDelegateKey.defaultValue,
+                          let foundPatient = try await appDelegate.store?.fetchPatients(query: queryForCurrentPatient),
+                          var currentPatient = foundPatient.first else {
+                        // swiftlint:disable:next line_length
+                        Logger.profile.error("Could not find patient with id \"\(uuid)\". It's possible they have never been saved.")
+                        return
+                    }
+
+                    // Set type
+                    switch workoutType {
+                    case "Body Building":
+                        currentPatient.workoutType = .bodybuilding
+                    case "Weight Lifting":
+                        currentPatient.workoutType = .weightlifting
+                    case "Power Lifting":
+                        currentPatient.workoutType = .powerlifting
+                    default:
+                        currentPatient.workoutType = .bodybuilding
+                    }
+
+                    // Update Patient
+                    _ = try await appDelegate.store?.updatePatient(currentPatient)
+
+                }
+                  view.instructionsLabel.text = """
                     Workout type: \(workoutType ?? "Body Building")
-                    Bench Max: \(benchMax)
-                    Squat Max: \(squatMax)
-                    Deadlift Max: \(deadliftMax)
-                    Snatch Max: \(snatchMax)
-                    Clean Max: \(cleanMax)
+                    Bench Max: \(Int(benchMax))
+                    Squat Max: \(Int(squatMax))
+                    Deadlift Max: \(Int(deadliftMax))
+                    Snatch Max: \(Int(snatchMax))
+                    Clean Max: \(Int(cleanMax))
                     """
             default:
                 view.instructionsLabel.text = "Unknown survey type."

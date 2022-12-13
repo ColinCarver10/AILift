@@ -12,76 +12,72 @@ import CareKitStore
 struct CustomCardView: View {
     @Environment(\.careKitStyle) var style
     @StateObject var viewModel: CustomCardViewModel
+    @State var completedButtonLabel = "Mark as Completed"
+    @State var completedButtonBackground: Color = .secondary
 
     var body: some View {
         CardView {
             VStack(alignment: .leading,
                    spacing: style.dimension.directionalInsets1.top) {
-                /*
                 // Example of custom content that looks something like Header.
-                 // xTODO: Remove this if you don't use it.
                  VStack(alignment: .leading, spacing: style.dimension.directionalInsets1.top / 4.0) {
                     Text(viewModel.taskEvents.firstEventTitle)
                         .font(.headline)
                         .fontWeight(.bold)
-                    Text(viewModel.taskEvents.firstEventDetail ?? "")
+                    Text(viewModel.taskEvents.firstTaskInstructions ?? "")
                         .font(.caption)
                         .fontWeight(.medium)
                 }
                 .foregroundColor(Color.primary)
-                */
-                // Can look through HeaderView for creating custom
-                HeaderView(title: Text(viewModel.taskEvents.firstEventTitle),
-                           detail: Text(viewModel.taskEvents.firstEventDetail ?? ""))
+
                 Divider()
-                HStack(alignment: .center,
-                       spacing: style.dimension.directionalInsets2.trailing) {
 
-                    /*
-                     // Example of custom content.
-                     xTODO: Remove all that you are not using.
-                     */
-                    Button(action: {
-                        Task {
-                            await viewModel.action(viewModel.value)
-                        }
-                    }) {
-                        CircularCompletionView(isComplete: viewModel.taskEvents.isFirstEventComplete) {
-                            Image(systemName: "checkmark") // Can place any view type here
-                                .resizable()
-                                .padding()
-                                .frame(width: 50, height: 50) // Change size to make larger/smaller
-                        }
-                    }
-                    Spacer()
+                VStack {
 
-                    Text("Input: ")
-                        .font(Font.headline)
-                    TextField("0.0",
-                              value: $viewModel.value,
-                              formatter: viewModel.amountFormatter)
-                        .keyboardType(.decimalPad)
-                        .font(Font.title.weight(.bold))
-                        .foregroundColor(.accentColor)
-
-                    Spacer()
-                    Button(action: {
-                        Task {
-                            await viewModel.action(viewModel.value)
-                        }
-                    }) {
-                        RectangularCompletionView(isComplete: viewModel.taskEvents.isFirstEventComplete) {
-                            Image(systemName: "checkmark") // Can place any view type here
-                                .resizable()
-                                .padding()
-                                .frame(width: 50, height: 50) // Change size to make larger/smaller
-                        }
+                    HStack {
+                        Text("Weight: ")
+                            .font(Font.headline)
+                        TextField("lbs",
+                                  value: $viewModel.weight,
+                                  formatter: viewModel.amountFormatter)
+                            .keyboardType(.phonePad)
+                            .font(Font.title.weight(.bold))
+                            .foregroundColor(.accentColor)
                     }
 
-                    Text(viewModel.valueForButton)
-                        .multilineTextAlignment(.trailing)
-                        .font(Font.title.weight(.bold))
-                        .foregroundColor(.accentColor)
+                    HStack(alignment: .center,
+                           spacing: style.dimension.directionalInsets2.trailing) {
+
+                        Text("RPE: ")
+                            .font(Font.headline)
+                        Stepper(value: $viewModel.RPE,
+                                in: 1...10,
+                                step: 1) {
+                            Text("\(viewModel.RPE)")
+                                .font(Font.title.weight(.bold))
+
+                        }
+                    }
+                }
+                Button(action: {
+                    if completedButtonLabel == "Mark as Completed" {
+                        completedButtonLabel = "Completed"
+                    } else {
+                        completedButtonLabel = "Mark as Completed"
+                    }
+                    if completedButtonBackground == .secondary {
+                        completedButtonBackground = .accentColor
+                    } else {
+                        completedButtonBackground = .secondary
+                    }
+
+                }) {
+                    Text(completedButtonLabel)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity, minHeight: 50, alignment: .center)
+                        .background(RoundedRectangle(cornerRadius: style.appearance.cornerRadius2,
+                                                     style: .continuous)
+                            .fill(completedButtonBackground))
                 }
             }
             .padding()

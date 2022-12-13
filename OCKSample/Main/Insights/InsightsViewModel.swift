@@ -164,7 +164,7 @@ class InsightsViewController: OCKListViewController {
                 gradientStartColor: nauseaGradientStart,
                 gradientEndColor: nauseaGradientEnd,
                 markerSize: 10,
-                eventAggregator: OCKEventAggregator.countOutcomeValues)
+                eventAggregator: OCKEventAggregator.countOutcomes)
 
             let insightsCard = OCKCartesianChartViewController(
                 plotType: .bar,
@@ -179,11 +179,75 @@ class InsightsViewController: OCKListViewController {
 
             return cards
 
+        case TaskID.warmup:
+            var cards = [UIViewController]()
+            // dynamic gradient colors
+            let nauseaGradientStart = TintColorFlipKey.defaultValue
+            let nauseaGradientEnd = TintColorKey.defaultValue
+
+            // Create a plot comparing nausea to medication adherence.
+            let recoveryDataSeries = OCKDataSeriesConfiguration(
+                taskID: TaskID.warmup,
+                legendTitle: "Warmups",
+                gradientStartColor: nauseaGradientStart,
+                gradientEndColor: nauseaGradientEnd,
+                markerSize: 10,
+                eventAggregator: OCKEventAggregator.countOutcomeValues)
+
+            let insightsCard = OCKCartesianChartViewController(
+                plotType: .bar,
+                selectedDate: date,
+                configurations: [recoveryDataSeries],
+                storeManager: self.storeManager)
+
+            insightsCard.chartView.headerView.titleLabel.text = "Warmups"
+            insightsCard.chartView.headerView.detailLabel.text = "This Week"
+            insightsCard.chartView.headerView.accessibilityLabel = "Warmups"
+            cards.append(insightsCard)
+
+            return cards
+
+        case TaskID.foamRoll:
+            var cards = [UIViewController]()
+            // dynamic gradient colors
+            let nauseaGradientStart = TintColorFlipKey.defaultValue
+            let nauseaGradientEnd = TintColorKey.defaultValue
+
+            // Create a plot comparing nausea to medication adherence.
+            let recoveryDataSeries = OCKDataSeriesConfiguration(
+                taskID: TaskID.foamRoll,
+                legendTitle: "Foam roll occurences",
+                gradientStartColor: nauseaGradientStart,
+                gradientEndColor: nauseaGradientEnd,
+                markerSize: 10,
+                eventAggregator: OCKEventAggregator.countOutcomes)
+
+            let insightsCard = OCKCartesianChartViewController(
+                plotType: .bar,
+                selectedDate: date,
+                configurations: [recoveryDataSeries],
+                storeManager: self.storeManager)
+
+            insightsCard.chartView.headerView.titleLabel.text = "Foam Roll"
+            insightsCard.chartView.headerView.detailLabel.text = "This Week"
+            insightsCard.chartView.headerView.accessibilityLabel = "Foam Roll"
+            cards.append(insightsCard)
+
+            return cards
+
+        /* This doesn't fully work yet so I removed it.
         case TaskID.recovery:
             var cards = [UIViewController]()
             // dynamic gradient colors
             let nauseaGradientStart = TintColorFlipKey.defaultValue
             let nauseaGradientEnd = TintColorKey.defaultValue
+
+            // xTODO: This does not actually work yet.
+            var HRV: Double?
+            // Need to fetch from healthkit
+            fetchHRV(completion: { (heartRateVariability) in
+                HRV = heartRateVariability
+            })
 
             // Create a plot comparing nausea to medication adherence.
             let recoveryDataSeries = OCKDataSeriesConfiguration(
@@ -192,7 +256,7 @@ class InsightsViewController: OCKListViewController {
                 gradientStartColor: nauseaGradientStart,
                 gradientEndColor: nauseaGradientEnd,
                 markerSize: 10,
-                eventAggregator: OCKEventAggregator.countOutcomeValues)
+                eventAggregator: .aggregatorMean(TaskID.recovery))
 
             let insightsCard = OCKCartesianChartViewController(
                 plotType: .line,
@@ -206,7 +270,7 @@ class InsightsViewController: OCKListViewController {
             cards.append(insightsCard)
 
             return cards
-
+         */
         default:
             return nil
         }
@@ -230,5 +294,46 @@ class InsightsViewController: OCKListViewController {
                 self.appendViewController($0, animated: false)
             }
         }
+    }
+}
+
+extension InsightsViewController {
+    func fetchHRV(completion: @escaping (Double?) -> Void) {
+        let healthKitStore: HKHealthStore = HKHealthStore()
+        guard let HRV = HKSampleType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRateVariabilitySDNN)
+        else {
+            // This should never fail when using a defined constant.
+            fatalError("*** Unable to get the HRV count type ***")
+        }
+
+        let calendar = NSCalendar.current
+        let now = Date()
+        let components = calendar.dateComponents([.year, .month, .day], from: now)
+
+        guard let startDate = calendar.date(from: components) else {
+            fatalError("*** Unable to create the start date ***")
+        }
+
+        guard let endDate = calendar.date(byAdding: .day, value: 1, to: startDate) else {
+            fatalError("*** Unable to create the end date ***")
+        }
+
+        let today = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [])
+
+        let query = HKStatisticsQuery(quantityType: HRV,
+                                      quantitySamplePredicate: today,
+                                      options: .discreteAverage) { (_, statisticsOrNil: HKStatistics?, _: Error?) in
+
+            guard let statistics = statisticsOrNil else {
+                // Handle any errors here.
+                return
+            }
+
+            let avg = statistics.averageQuantity()
+            let averageHRV = avg?.doubleValue(for: HKUnit.secondUnit(with: .milli))
+
+            completion(averageHRV)
+        }
+        healthKitStore.execute(query)
     }
 }

@@ -44,8 +44,8 @@ extension OCKHealthKitPassthroughStore {
 
     func populateSampleData(_ patientUUID: UUID? = nil) async throws {
 
-        let schedule = OCKSchedule.dailyAtTime(
-            hour: 8, minutes: 0, start: Date(), end: nil, text: "Anytime throughout the day",
+        let scheduleRecovery = OCKSchedule.dailyAtTime(
+            hour: 8, minutes: 0, start: Date(), end: nil, text: "Most recent measurement",
             duration: .hours(12), targetValues: [OCKOutcomeValue(90, units: "Milliseconds")])
 
         let recoveryNumber = OCKHealthKitLinkage(quantityIdentifier: .heartRateVariabilitySDNN,
@@ -54,11 +54,27 @@ extension OCKHealthKitPassthroughStore {
         var recovery = OCKHealthKitTask(id: TaskID.recovery,
                                         title: "Recovery Quotient",
                                         carePlanUUID: patientUUID,
-                                        schedule: schedule,
+                                        schedule: scheduleRecovery,
                                         healthKitLinkage: recoveryNumber)
         recovery.card = .numericProgress
         recovery.asset = "bolt.heart"
 
-        try await addTasksIfNotPresent([recovery])
+        let energyBurnedSchedule = OCKSchedule.dailyAtTime(
+            hour: 8, minutes: 0, start: Date(), end: nil, text: "Today",
+            duration: .allDay, targetValues: [OCKOutcomeValue(800, units: "Calories")])
+
+        let energyBurnedLinkage = OCKHealthKitLinkage(quantityIdentifier: .activeEnergyBurned,
+                                                      quantityType: .cumulative,
+                                                      unit: .largeCalorie())
+
+        var energyBurned = OCKHealthKitTask(id: TaskID.energyBurned,
+                                            title: "Active Calories Burned",
+                                            carePlanUUID: patientUUID,
+                                            schedule: energyBurnedSchedule,
+                                            healthKitLinkage: energyBurnedLinkage)
+        energyBurned.card = .labeledValue
+        energyBurned.asset = "flame.circle"
+
+        try await addTasksIfNotPresent([recovery, energyBurned])
     }
 }

@@ -47,10 +47,22 @@ extension OCKStore {
         let checkInCarePlan = OCKCarePlan(id: CarePlanID.checkIn.rawValue,
                                           title: "Check in Care Plan",
                                           patientUUID: patientUUID)
+        let legDayCarePlan = OCKCarePlan(id: CarePlanID.legDay.rawValue,
+                                          title: "Leg Day Care Plan",
+                                          patientUUID: patientUUID)
+        let armDayCarePlan = OCKCarePlan(id: CarePlanID.armDay.rawValue,
+                                          title: "Arm Day Care Plan",
+                                          patientUUID: patientUUID)
+        let restDayCarePlan = OCKCarePlan(id: CarePlanID.restDay.rawValue,
+                                          title: "Rest Day Care Plan",
+                                          patientUUID: patientUUID)
         try await AppDelegateKey
             .defaultValue?
             .storeManager
-            .addCarePlansIfNotPresent([checkInCarePlan],
+            .addCarePlansIfNotPresent([checkInCarePlan,
+                                       legDayCarePlan,
+                                       armDayCarePlan,
+                                       restDayCarePlan],
                                       patientUUID: patientUUID)
     }
 
@@ -116,69 +128,30 @@ extension OCKStore {
             return
         }
 
-        let nauseaSchedule = OCKSchedule(composing: [
-            OCKScheduleElement(start: beforeBreakfast, end: nil, interval: DateComponents(day: 1),
-                               text: "Anytime throughout the day", targetValues: [], duration: .allDay)
-            ])
+        let mainLifts = weightlifting(carePlanUUIDs: carePlanUUIDs)
+        let warmup = warmup(carePlanUUIDs: carePlanUUIDs,
+                            thisMorning: thisMorning,
+                            aFewDaysAgo: aFewDaysAgo,
+                            beforeBreakfast: beforeBreakfast)
 
-        var repetition = OCKTask(id: TaskID.repetition,
-                                 title: "Track your repetitions",
-                                 carePlanUUID: nil,
-                                 schedule: nauseaSchedule)
-        repetition.impactsAdherence = false
-        repetition.instructions = "Input how many reps you completed."
-        repetition.asset = "repeat.circle"
-        repetition.card = .custom
+        let foamRollSchedule = OCKSchedule.dailyAtTime(
+            hour: 8, minutes: 0, start: Date(), end: nil, text: "Today",
+            duration: .allDay)
 
-        let cardio = OCKScheduleElement(start: beforeBreakfast,
-                                        end: nil,
-                                        interval: DateComponents(day: 1),
-                                        text: "Low Intensity Cardio",
-                                        duration: .minutes(5))
-        let foamRoll = OCKScheduleElement(start: beforeBreakfast,
-                                          end: nil,
-                                          interval: DateComponents(day: 1),
-                                          text: "Foam Roll",
-                                          duration: .minutes(3))
-        let legSwings = OCKScheduleElement(start: beforeBreakfast,
-                                           end: nil,
-                                           interval: DateComponents(day: 1),
-                                           text: "Vertical & Horizontal Leg Swings",
-                                           duration: .minutes(3))
-        let gluteSqueeze = OCKScheduleElement(start: beforeBreakfast,
-                                              end: nil,
-                                              interval: DateComponents(day: 1),
-                                              text: "Standing Glute Squeeze",
-                                              duration: .seconds(30))
-        let proneTrapRaise = OCKScheduleElement(start: beforeBreakfast,
-                                                end: nil,
-                                                interval: DateComponents(day: 1),
-                                                text: "Prone Trap Raise",
-                                                duration: .seconds(30))
-        let cableRotation = OCKScheduleElement(start: beforeBreakfast,
-                                               end: nil,
-                                               interval: DateComponents(day: 1),
-                                               text: "Internal & External Cable Rotation",
-                                               duration: .minutes(2))
-        let overheadShrug = OCKScheduleElement(start: beforeBreakfast,
-                                               end: nil,
-                                               interval: DateComponents(day: 1),
-                                               text: "Overhead Shrug",
-                                               duration: .seconds(30))
+        var foamRoll = OCKTask(id: TaskID.foamRoll,
+                               title: "Foam Roll", carePlanUUID: nil,
+                               schedule: foamRollSchedule)
+        foamRoll.instructions = "Foam roll daily to stay healthy."
+        foamRoll.card = .simple
 
-        let warmupSchedule = OCKSchedule(composing: [cardio,
-                                                     foamRoll,
-                                                     legSwings,
-                                                     gluteSqueeze,
-                                                     proneTrapRaise,
-                                                     cableRotation,
-                                                     overheadShrug])
-        var warmup = OCKTask(id: TaskID.warmup, title: "Warm Up", carePlanUUID: nil, schedule: warmupSchedule)
-        warmup.impactsAdherence = true
-        warmup.asset = "figure.rolling"
-        warmup.card = .checklist
+        var tasksToAdd: [OCKTask] = []
+        tasksToAdd.append(warmup)
+        tasksToAdd.append(foamRoll)
+        for task in mainLifts {
+            tasksToAdd.append(task)
+        }
 
-        try await addTasksIfNotPresent([repetition, warmup])
+        try await addTasksIfNotPresent(tasksToAdd)
         try await addOnboardTask(carePlanUUIDs[.health])
         try await addSurveyTasks(carePlanUUIDs[.checkIn])
 
@@ -274,4 +247,246 @@ extension OCKStore {
 
         try await addTasksIfNotPresent([checkInTask, workoutSetupTask])
     }
+
+    func weightlifting(carePlanUUIDs: [CarePlanID: UUID]) -> [OCKTask] {
+
+        var cards: [OCKTask] = []
+
+        // Sunday
+        var sundayRestDay = OCKTask(id: "SundayRestDay",
+                              title: "Rest Day",
+                                    carePlanUUID: carePlanUUIDs[.restDay],
+                              schedule: DaySchedules.sundaySchedule)
+        sundayRestDay.impactsAdherence = false
+        sundayRestDay.instructions = "Take today off to recover!"
+        sundayRestDay.asset = "hourglass"
+        sundayRestDay.card = .instruction
+        cards.append(sundayRestDay)
+
+        var fridayRestDay = OCKTask(id: "FridayRestDay",
+                              title: "Rest Day",
+                              carePlanUUID: carePlanUUIDs[.restDay],
+                              schedule: DaySchedules.fridaySchedule)
+        fridayRestDay.impactsAdherence = false
+        fridayRestDay.instructions = "Take today off to recover!"
+        fridayRestDay.asset = "hourglass"
+        fridayRestDay.card = .instruction
+        cards.append(fridayRestDay)
+
+        var saturdayRestDay = OCKTask(id: "SaturdayRestDay",
+                              title: "Rest Day",
+                              carePlanUUID: carePlanUUIDs[.restDay],
+                              schedule: DaySchedules.saturdaySchedule)
+        saturdayRestDay.impactsAdherence = false
+        saturdayRestDay.instructions = "Take today off to recover!"
+        saturdayRestDay.asset = "hourglass"
+        saturdayRestDay.card = .instruction
+        cards.append(saturdayRestDay)
+
+        // Monday
+        var mondayBench = OCKTask(id: "MondayBench",
+                                  title: "Barbell Bench Press",
+                                  carePlanUUID: carePlanUUIDs[.armDay],
+                                  schedule: DaySchedules.mondaySchedule)
+        mondayBench.instructions = "4x6 @ 72.5%"
+        mondayBench.asset = "figure.strengthtraining.traditional"
+        mondayBench.card = .custom
+        cards.append(mondayBench)
+
+        var mondayPullUp = OCKTask(id: "MondayPullUp",
+                                  title: "Pull-Up",
+                                  carePlanUUID: carePlanUUIDs[.armDay],
+                                  schedule: DaySchedules.mondaySchedule)
+        mondayPullUp.instructions = "3x8"
+        mondayPullUp.asset = "figure.strengthtraining.traditional"
+        mondayPullUp.card = .custom
+        cards.append(mondayPullUp)
+
+        var mondayInclinePress = OCKTask(id: "MondayInclinePress",
+                                  title: "Barbell Incline Bench Press",
+                                  carePlanUUID: carePlanUUIDs[.armDay],
+                                  schedule: DaySchedules.mondaySchedule)
+        mondayInclinePress.instructions = "2x8 @ 72.5%"
+        mondayInclinePress.asset = "figure.strengthtraining.traditional"
+        mondayInclinePress.card = .custom
+        cards.append(mondayInclinePress)
+
+        var mondayRow = OCKTask(id: "MondayRow",
+                                  title: "Inverted Row",
+                                  carePlanUUID: carePlanUUIDs[.armDay],
+                                  schedule: DaySchedules.mondaySchedule)
+        mondayRow.instructions = "3x10"
+        mondayRow.asset = "figure.strengthtraining.traditional"
+        mondayRow.card = .custom
+        cards.append(mondayRow)
+
+        // Tuesday
+        var tuesdaySquat = OCKTask(id: "TuesdaySquat",
+                                  title: "Barbell Squat",
+                                  carePlanUUID: carePlanUUIDs[.legDay],
+                                  schedule: DaySchedules.tuesdaySchedule)
+        tuesdaySquat.instructions = "3x5 @ 75%"
+        tuesdaySquat.asset = "figure.strengthtraining.traditional"
+        tuesdaySquat.card = .custom
+        cards.append(tuesdaySquat)
+
+        var tuesdayDeadlift = OCKTask(id: "TuesdayDeadlift",
+                                  title: "Stiff Leg Deadlift",
+                                  carePlanUUID: carePlanUUIDs[.legDay],
+                                  schedule: DaySchedules.tuesdaySchedule)
+        tuesdayDeadlift.instructions = "3x10"
+        tuesdayDeadlift.asset = "figure.strengthtraining.traditional"
+        tuesdayDeadlift.card = .custom
+        cards.append(tuesdayDeadlift)
+
+        var tuesdayHipThrust = OCKTask(id: "TuesdayHipThrust",
+                                  title: "Barbell Hip Thrust",
+                                  carePlanUUID: carePlanUUIDs[.legDay],
+                                  schedule: DaySchedules.tuesdaySchedule)
+        tuesdayHipThrust.instructions = "3x15"
+        tuesdayHipThrust.asset = "figure.strengthtraining.traditional"
+        tuesdayHipThrust.card = .custom
+        cards.append(tuesdayHipThrust)
+
+        // Wednesday
+        var wednesdayBench = OCKTask(id: "WednesdayBench",
+                                  title: "Barbell Bench Press",
+                                  carePlanUUID: carePlanUUIDs[.armDay],
+                                  schedule: DaySchedules.wednesdaySchedule)
+        wednesdayBench.instructions = "5x3 @ 80%"
+        wednesdayBench.asset = "figure.strengthtraining.traditional"
+        wednesdayBench.card = .custom
+        cards.append(wednesdayBench)
+
+        var wednesdayPulldown = OCKTask(id: "WednesdayPulldown",
+                                  title: "Lat Pulldown",
+                                  carePlanUUID: carePlanUUIDs[.armDay],
+                                  schedule: DaySchedules.wednesdaySchedule)
+        wednesdayPulldown.instructions = "4x6"
+        wednesdayPulldown.asset = "figure.strengthtraining.traditional"
+        wednesdayPulldown.card = .custom
+        cards.append(wednesdayPulldown)
+
+        var wednesdayPress = OCKTask(id: "WednesdayPress",
+                                  title: "Barbell Pin Press",
+                                  carePlanUUID: carePlanUUIDs[.armDay],
+                                  schedule: DaySchedules.wednesdaySchedule)
+        wednesdayPress.instructions = "2x8"
+        wednesdayPress.asset = "figure.strengthtraining.traditional"
+        wednesdayPress.card = .custom
+        cards.append(wednesdayPress)
+
+        var wednesdayFacePull = OCKTask(id: "WednesdayFacePull",
+                                  title: "Seated Face Pull",
+                                  carePlanUUID: carePlanUUIDs[.armDay],
+                                  schedule: DaySchedules.wednesdaySchedule)
+        wednesdayFacePull.instructions = "3x15"
+        wednesdayFacePull.asset = "figure.strengthtraining.traditional"
+        wednesdayFacePull.card = .custom
+        cards.append(wednesdayFacePull)
+
+        // Thursday
+        var thursdayDeadlift = OCKTask(id: "ThursdayDeadlift",
+                                  title: "Deadlift",
+                                  carePlanUUID: carePlanUUIDs[.legDay],
+                                  schedule: DaySchedules.thursdaySchedule)
+        thursdayDeadlift.instructions = "4x6"
+        thursdayDeadlift.asset = "figure.strengthtraining.traditional"
+        thursdayDeadlift.card = .custom
+        cards.append(thursdayDeadlift)
+
+        var thursdaySquat = OCKTask(id: "ThursdaySquat",
+                                  title: "Front Squat",
+                                  carePlanUUID: carePlanUUIDs[.legDay],
+                                  schedule: DaySchedules.thursdaySchedule)
+        thursdaySquat.instructions = "3x10"
+        thursdaySquat.asset = "figure.strengthtraining.traditional"
+        thursdaySquat.card = .custom
+        cards.append(thursdaySquat)
+
+        var thursdayLegPress = OCKTask(id: "ThursdayLegPress",
+                                  title: "Leg Press",
+                                  carePlanUUID: carePlanUUIDs[.legDay],
+                                  schedule: DaySchedules.thursdaySchedule)
+        thursdayLegPress.instructions = "3x10"
+        thursdayLegPress.asset = "figure.strengthtraining.traditional"
+        thursdayLegPress.card = .custom
+        cards.append(thursdayLegPress)
+
+        var thursdayLegCurl = OCKTask(id: "ThursdayLegCurl",
+                                  title: "Leg Curl",
+                                  carePlanUUID: carePlanUUIDs[.legDay],
+                                  schedule: DaySchedules.thursdaySchedule)
+        thursdayLegCurl.instructions = "3x10"
+        thursdayLegCurl.asset = "figure.strengthtraining.traditional"
+        thursdayLegCurl.card = .custom
+        cards.append(thursdayLegCurl)
+
+        return cards
+    }
+
+    func bodybuilding() {
+        // Need to add
+    }
+
+    func powerlifting() {
+        // Need to add
+    }
+
+    func warmup(carePlanUUIDs: [CarePlanID: UUID],
+                thisMorning: Date,
+                aFewDaysAgo: Date,
+                beforeBreakfast: Date) -> OCKTask {
+
+        let cardio = OCKScheduleElement(start: beforeBreakfast,
+                                        end: nil,
+                                        interval: DateComponents(day: 1),
+                                        text: "Low Intensity Cardio",
+                                        duration: .minutes(5))
+        let foamRoll = OCKScheduleElement(start: beforeBreakfast,
+                                          end: nil,
+                                          interval: DateComponents(day: 1),
+                                          text: "Foam Roll",
+                                          duration: .minutes(3))
+        let legSwings = OCKScheduleElement(start: beforeBreakfast,
+                                           end: nil,
+                                           interval: DateComponents(day: 1),
+                                           text: "Vertical & Horizontal Leg Swings",
+                                           duration: .minutes(3))
+        let gluteSqueeze = OCKScheduleElement(start: beforeBreakfast,
+                                              end: nil,
+                                              interval: DateComponents(day: 1),
+                                              text: "Standing Glute Squeeze",
+                                              duration: .seconds(30))
+        let proneTrapRaise = OCKScheduleElement(start: beforeBreakfast,
+                                                end: nil,
+                                                interval: DateComponents(day: 1),
+                                                text: "Prone Trap Raise",
+                                                duration: .seconds(30))
+        let cableRotation = OCKScheduleElement(start: beforeBreakfast,
+                                               end: nil,
+                                               interval: DateComponents(day: 1),
+                                               text: "Internal & External Cable Rotation",
+                                               duration: .minutes(2))
+        let overheadShrug = OCKScheduleElement(start: beforeBreakfast,
+                                               end: nil,
+                                               interval: DateComponents(day: 1),
+                                               text: "Overhead Shrug",
+                                               duration: .seconds(30))
+
+        let warmupSchedule = OCKSchedule(composing: [cardio,
+                                                     foamRoll,
+                                                     legSwings,
+                                                     gluteSqueeze,
+                                                     proneTrapRaise,
+                                                     cableRotation,
+                                                     overheadShrug])
+        var warmup = OCKTask(id: TaskID.warmup, title: "Warm Up", carePlanUUID: nil, schedule: warmupSchedule)
+        warmup.impactsAdherence = true
+        warmup.asset = "figure.rolling"
+        warmup.card = .checklist
+
+        return warmup
+    }
+
 }

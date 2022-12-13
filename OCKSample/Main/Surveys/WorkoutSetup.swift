@@ -117,7 +117,6 @@ extension WorkoutSetup {
     }
 
     func extractAnswers(_ result: ORKTaskResult) -> [OCKOutcomeValue]? {
-        // Need to figure out how to extract the answer.
         guard
             let typeResponse = result.results?
                 .compactMap({ $0 as? ORKStepResult })
@@ -178,7 +177,8 @@ extension WorkoutSetup {
         var snatchMax = OCKOutcomeValue(Double(truncating: snatchMaxAnswer))
         snatchMax.kind = Self.snatchMaxIdentifier
 
-        // var workoutType = OCKOutcomeValue(workoutAnswer)
+        Constants.workoutSetupCompleted = true
+
         return [type, benchMax, squatMax, deadliftMax, cleanMax, snatchMax]
     }
 

@@ -89,7 +89,6 @@ extension Onboard {
         let healthKitTypesToWrite: Set<HKSampleType> = [
             .quantityType(forIdentifier: .bodyMassIndex)!,
             .quantityType(forIdentifier: .activeEnergyBurned)!,
-            .quantityType(forIdentifier: .activeEnergyBurned)!,
             .quantityType(forIdentifier: .heartRateVariabilitySDNN)!,
             .workoutType()
         ]
