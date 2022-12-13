@@ -36,6 +36,7 @@ ParseCareKit synchronizes the following entities to Parse tables/classes using [
 **Use at your own risk. There is no promise that this is HIPAA compliant and we are not responsible for any mishandling of your data**
 
 ## Contributions / Features
+NEED TO DO THIS
 
 ## Final Checklist
 - [x] Signup/Login screen tailored to app
@@ -65,7 +66,19 @@ ParseCareKit synchronizes the following entities to Parse tables/classes using [
 - [x] Use at least 2 custom cards ONLY HAVE DONE 1
 - [x] Replace the current TipView with a class with CustomFeaturedContentView that subclasses OCKFeaturedContentView.
 
+## Wishlist features
+- Update OCKStore based off type of workout selected.
+    - Add other workout programs.
+- Have profile view autoupdate. Currently does not automatically change to what is set by Workout Setup Survey.
+- Create algorithm to display user friendly charts that depict recovery levels based off HRV, sleep, etc.
+- Graph user inputted weight of each major lift over time. (Ideally graph it against projected max)
+- Use sleep and HRV to update workout volume.
+- Delete tasks.
 
+## Challenges faced while developing
+
+---
+# Below is information for setting up the application.
 
 ## Setup Your Parse Server
 
