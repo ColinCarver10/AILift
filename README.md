@@ -36,7 +36,22 @@ ParseCareKit synchronizes the following entities to Parse tables/classes using [
 **Use at your own risk. There is no promise that this is HIPAA compliant and we are not responsible for any mishandling of your data**
 
 ## Contributions / Features
-NEED TO DO THIS
+- Added workout setup survey that asks the user to select workout type (bodybuilding, powerlifting, or weightlifting). Additionally, asks the users to input their current maxes for each major compound lift.
+  - Custom Survey that uses ORKQuestionStep and ORKForm.
+- CustomFeaturedContentView that links to a playlist of videos displaying how to do the exercises listed.
+- Updated CheckIn survey to poll the user's sleep quality, recovery level, and current stress levels.
+  - All survey's display information on completion.
+- Heart Rate Variability OCKHealthKitTask displayed as NumericProgressTaskView
+- OCKSimpleTaskViewController to display rest days.
+- Check List that displays users warmup process.
+- Custom Card that display workouts.
+  - Allows user to input the weight they used for the lift.
+  - User inputs RPE (Rate of Perceived Exertion) using stepper.
+- Users can add tasks in profile view.
+- Added insights tab to display charts for each task.
+- LabeledValueTask to display total number of active calories burned during the day.
+- SimpleTaskView to check if user has foam rolled or not.
+- Added leg day, arm day, and rest day OCKCarePlans.
 
 ## Final Checklist
 - [x] Signup/Login screen tailored to app
@@ -61,9 +76,9 @@ NEED TO DO THIS
 - [x] Add another Researchkit survey card
 - [x] Replace current ContactView with Searchable contact view
 - [x] Change the ProfileView to use a Form view
-- [x] Add at least two OCKCarePlan's and tie them to their respective OCKTask's and OCContact's NEED TO DO THIS
+- [x] Add at least two OCKCarePlan's and tie them to their respective OCKTask's and OCContact's
 - [x] Add a new tab called "Insights" to MainTabView
-- [x] Use at least 2 custom cards ONLY HAVE DONE 1
+- [x] Use at least 2 custom cards
 - [x] Replace the current TipView with a class with CustomFeaturedContentView that subclasses OCKFeaturedContentView.
 
 ## Wishlist features
@@ -76,7 +91,7 @@ NEED TO DO THIS
 - Delete tasks.
 
 ## Challenges faced while developing
-
+NEED TO DO THIS
 ---
 # Below is information for setting up the application.
 
