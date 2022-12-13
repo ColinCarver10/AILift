@@ -161,6 +161,7 @@ enum TaskType: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
 }
 
+
 enum Day: Int, CaseIterable, Identifiable {
     case sunday = 1
     case monday = 2

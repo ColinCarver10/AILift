@@ -91,6 +91,7 @@ private extension AddTaskView {
                            selection: $viewModel.taskSchedule,
                            displayedComponents: [.date])*/
 
+
                 Picker("Select asset", selection: $viewModel.selectedAsset) {
                     Text("Heart").tag("heart.fill")
                     Text("Bed").tag("bed.double.circle.fill")
@@ -139,6 +140,7 @@ private extension AddTaskView {
                 DatePicker("Schedule",
                            selection: $viewModel.taskSchedule,
                            displayedComponents: [.date])*/
+
 
                 Picker("Select asset", selection: $viewModel.selectedAsset) {
                     Text("Heart").tag("heart.fill")
