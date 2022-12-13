@@ -1,7 +1,14 @@
-# CareKitSample+ParseCareKit
+# AI Lift
 ![Swift](https://img.shields.io/badge/swift-5.7-brightgreen.svg) ![Xcode 14.0+](https://img.shields.io/badge/xcode-14.0%2B-blue.svg) ![iOS 16.0+](https://img.shields.io/badge/iOS-16.0%2B-blue.svg) ![watchOS 9.0+](https://img.shields.io/badge/watchOS-9.0%2B-blue.svg) ![CareKit 2.1+](https://img.shields.io/badge/CareKit-2.1%2B-red.svg) ![ci](https://github.com/netreconlab/CareKitSample-ParseCareKit/workflows/ci/badge.svg?branch=main)
 
-An example application of [CareKit](https://github.com/carekit-apple/CareKit)'s OCKSample synchronizing CareKit data to the Cloud via [ParseCareKit](https://github.com/netreconlab/ParseCareKit).
+## Description
+  AI Lift is an application designed to give user's options when it comes to their workouts. Traditional workout programs are carbon copied from person to person, but do not factor in important factors like workout history and current recovery levels. AI Lift pairs user reported data and automatically gathered HealthKit data to dynamically adjust a user's workout program. Information such as sleep quality, current stress levels, and other biometric data are used to automatically adjust how much exercise volume the user is doing during a workout. 
+  
+  One significant metric that is measured is heart rate variability (HRV). HRV is the difference in time between the beats of your heart. This is an easy way to measure the autonomic nervous system which plays a large role in how ready one is to get back into the gym. HRV can also give insights into how physically fit one is which can help determine the user's experience level. On average, a higher HRV measurement is better, but it is important to note that this value varies drastically from person to person.
+  
+#### Below is a graph of HRV ranges based off of age.
+![HRV Chart](https://www.whoop.com/wp-content/uploads/2020/01/heart-rate-variability-chart-ms-by-age-1024x928.png)
+
 
 <img src="https://user-images.githubusercontent.com/8621344/101721031-06869500-3a75-11eb-9631-88927e9c8f00.png" width="300"> <img src="https://user-images.githubusercontent.com/8621344/101721111-33d34300-3a75-11eb-885e-4a6fc96dbd35.png" width="300"> <img src="https://user-images.githubusercontent.com/8621344/101721146-48afd680-3a75-11eb-955a-7848146a9d6f.png" width="300"><img src="https://user-images.githubusercontent.com/8621344/101721182-5cf3d380-3a75-11eb-99c9-bde40477acf3.png" width="300">
 
