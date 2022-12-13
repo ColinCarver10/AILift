@@ -8,7 +8,7 @@
   
 ### Below is a graph of HRV ranges based off of age.
 ![HRV Chart](https://www.whoop.com/wp-content/uploads/2020/01/heart-rate-variability-chart-ms-by-age-1024x928.png)
-
+###### Source: Whoop.com
 
 ## Demo Video
 ADD THIS
@@ -23,8 +23,6 @@ INSERT PICTURES
 ### Developed By:
 - [Colin Carver](https://github.com/ColinCarver10) - `University of Kentucky`, `Computer Science`
 
-**Similar to the [What's New in CareKit](https://developer.apple.com/videos/play/wwdc2020/10151/) WWDC20 video, this app syncs between the AppleWatch (setting the flag `isSyncingWithCloud` in `Constants.swift` to  `isSyncingWithCloud = false`. Different from the video, setting `isSyncingWithCloud = true` (default behavior) in the aforementioned files syncs iOS and watchOS to a Parse Server.**
-
 ParseCareKit synchronizes the following entities to Parse tables/classes using [Parse-Swift](https://github.com/parse-community/Parse-Swift):
 
 - [x] OCKTask <-> Task
@@ -36,6 +34,38 @@ ParseCareKit synchronizes the following entities to Parse tables/classes using [
 - [x] OCKContact <-> Contact
 
 **Use at your own risk. There is no promise that this is HIPAA compliant and we are not responsible for any mishandling of your data**
+
+## Contributions / Features
+
+## Final Checklist
+- [x] Signup/Login screen tailored to app
+- [x] Signup/Login with email address
+- [x] Custom app logo
+- [x] Custom styling
+- [x] Add at least **5 new OCKTask/OCKHealthKitTasks** to your app
+  - [x] Have a minimum of 7 OCKTask/OCKHealthKitTasks in your app
+  - [x] 3/7 of OCKTasks should have different OCKSchedules than what's in the original app
+- [x] Use at least 5/7 card below in your app
+  - [x] InstructionsTaskView
+  - [x] SimpleTaskView
+  - [x] Checklist
+  - [ ] Button Log
+  - [ ] GridTaskView
+  - [x] NumericProgressTaskView
+  - [x] LabeledValueTaskView
+- [x] Allow user to add new tasks including custom cards
+- [x] Add the LinkView (SwiftUI) card to your app
+- [x] Tailor the ResearchKit Onboarding to reflect your application
+- [x] Add tailored check-in ResearchKit survey to your app
+- [x] Add another Researchkit survey card
+- [x] Replace current ContactView with Searchable contact view
+- [x] Change the ProfileView to use a Form view
+- [x] Add at least two OCKCarePlan's and tie them to their respective OCKTask's and OCContact's NEED TO DO THIS
+- [x] Add a new tab called "Insights" to MainTabView
+- [x] Use at least 2 custom cards ONLY HAVE DONE 1
+- [x] Replace the current TipView with a class with CustomFeaturedContentView that subclasses OCKFeaturedContentView.
+
+
 
 ## Setup Your Parse Server
 
