@@ -11,7 +11,9 @@
 ###### Source: Whoop.com
 
 ## Demo Video
-ADD THIS
+[![Demo Video](https://i9.ytimg.com/vi_webp/j3uzbS3TaPk/mq1.webp?sqp=CPSt4pwG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGGUgVyhNMA8=&rs=AOn4CLAGSCQ4-tGOLUbrXOldBYewj7im8Q)](http://www.youtube.com/watch?v=j3uzbS3TaPk&ab)
+
+
 
 ## Designed for the following users
 AI Lift is designed for anyone looking to improve their overall physical strength levels without having to worry about overdoing or underdoing their workouts. All experience levels are welcome.
