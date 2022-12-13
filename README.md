@@ -6,11 +6,22 @@
   
   One significant metric that is measured is heart rate variability (HRV). HRV is the difference in time between the beats of your heart. This is an easy way to measure the autonomic nervous system which plays a large role in how ready one is to get back into the gym. HRV can also give insights into how physically fit one is which can help determine the user's experience level. On average, a higher HRV measurement is better, but it is important to note that this value varies drastically from person to person.
   
-#### Below is a graph of HRV ranges based off of age.
+### Below is a graph of HRV ranges based off of age.
 ![HRV Chart](https://www.whoop.com/wp-content/uploads/2020/01/heart-rate-variability-chart-ms-by-age-1024x928.png)
 
 
-<img src="https://user-images.githubusercontent.com/8621344/101721031-06869500-3a75-11eb-9631-88927e9c8f00.png" width="300"> <img src="https://user-images.githubusercontent.com/8621344/101721111-33d34300-3a75-11eb-885e-4a6fc96dbd35.png" width="300"> <img src="https://user-images.githubusercontent.com/8621344/101721146-48afd680-3a75-11eb-955a-7848146a9d6f.png" width="300"><img src="https://user-images.githubusercontent.com/8621344/101721182-5cf3d380-3a75-11eb-99c9-bde40477acf3.png" width="300">
+## Demo Video
+ADD THIS
+
+## Designed for the following users
+AI Lift is designed for anyone looking to improve their overall physical strength levels without having to worry about overdoing or underdoing their workouts. All experience levels are welcome.
+
+## Application Demo
+
+INSERT PICTURES
+
+### Developed By:
+- [Colin Carver](https://github.com/ColinCarver10) - `University of Kentucky`, `Computer Science`
 
 **Similar to the [What's New in CareKit](https://developer.apple.com/videos/play/wwdc2020/10151/) WWDC20 video, this app syncs between the AppleWatch (setting the flag `isSyncingWithCloud` in `Constants.swift` to  `isSyncingWithCloud = false`. Different from the video, setting `isSyncingWithCloud = true` (default behavior) in the aforementioned files syncs iOS and watchOS to a Parse Server.**
 
